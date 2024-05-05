@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    background-color: #d2b62d;
+    overflow: hidden;
+}
+#box {
+    width: 100vw;
+}
+#map {
+    /* margin-bottom: 16px; */
+    height: 69vh;
+}
+#bar {
+    position: relative;
+    height: 26px;
+}
+#extra-info {
+    margin-top: 12px;
+    font-size: 12pt;
+    text-align: center;
+}
+.progressbar-text {
+    position: absolute;
+    color: #e6d57f;
+    font-weight: bolder;
+    width: 100vw;
+    text-align: center;
+    left: 0;
+    top: 11%;
+    padding: 3px;
+    margin: 0;
+}
