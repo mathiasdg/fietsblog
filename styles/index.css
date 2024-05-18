@@ -15,7 +15,7 @@ body {
 #fotos {
     margin-top: 44vh;
     background-color: cadetblue;
-    background-image: url('/images/bg.webp');
+    background-image: url('../images/bg.webp');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom;
