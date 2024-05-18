@@ -4,24 +4,83 @@
 }
 body {
     background-color: #d2b62d;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
-#box {
+#header {
+    position: fixed;
+    top: 0;
+    height: 200px;
     width: 100vw;
 }
+#fotos {
+    margin-top: 44vh;
+    background-color: cadetblue;
+    background-image: url('/images/bg.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom;
+    width: 100vw;
+    height: 100vh;
+}
+#blog {
+    width: 100vw;
+    min-height: 93vh;
+    padding-top: 4vh;
+    margin-top: 44vh;
+}
 #map {
-    /* margin-bottom: 16px; */
-    height: 69vh;
+    height: 44vh;
+}
+#progress {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 #bar {
     position: relative;
     height: 26px;
 }
 #extra-info {
-    margin-top: 12px;
-    font-size: 12pt;
-    text-align: center;
+    padding: 12px 24px;
+    font-size: 11pt;
+    background-color: #ff694469;
+    border-radius: 0 0 16px 16px;
 }
+
+.oop {
+	position: relative;
+	z-index: auto;
+	height: 10px;
+	background: linear-gradient(141deg, #48ded4 0%, #a026bf 51%, #e82c75 75%);
+}
+/* #extra-info::after,
+#extra-info::before {
+  content: '';
+  width: 55vw;
+  height: 40px;
+  border: 2px solid red;
+  position: absolute;
+  top: 25px;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+#extra-info::after {
+  border-left: 0;
+  border-radius: 6px 0 0 0;
+  left: -41px;
+} */
+/* #extra-info::before {
+    position: relative;
+    z-index: 69;
+    top: -12px;
+    left: -24px;
+    content: "*";
+    height: 30px;
+    width: 30px;
+    background-color: #ff6944;
+} */
 .progressbar-text {
     position: absolute;
     color: #e6d57f;
@@ -29,7 +88,7 @@ body {
     width: 100vw;
     text-align: center;
     left: 0;
-    top: 11%;
+    top: 8%;
     padding: 3px;
     margin: 0;
 }

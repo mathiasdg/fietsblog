@@ -1,0 +1,48 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#scrollbar {
+  position: fixed;
+  left: 0; /* Adjust as needed */
+  top: 0;
+  height: 100vh;
+  width: 6px;
+  margin-left: 6px;
+  background-color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dot {
+  cursor: pointer;
+  border: #333 solid 1px;
+  width: 11px;
+  height: 11px;
+  background-color: rgb(8, 230, 200);
+  border-radius: 50%;
+  /* margin: 10px 0; */
+}
+.active {
+    background-color: rgb(159, 14, 55);
+}
+
+#content {
+  /* margin-left: 50px; Adjust as needed based on the width of your scrollbar */
+  /* scroll-snap-type: y mandatory; */
+}
+
+.stage {
+  /* scroll-snap-align: start; */
+  height: 100vh; /* Full viewport height */
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  color: #fff;
+}

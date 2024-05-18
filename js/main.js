@@ -7,6 +7,26 @@
   - fietsje eventueel laten roteren
 */
 
+const headerDiv = document.getElementById('map');
+
+document.addEventListener('scroll', function(e) {
+  const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  // console.log('scroll-percentage: ', scrollPercentage.toFixed(0) + '%');
+  
+  if (scrollPercentage > 0) {
+    // headerDiv.style.opacity = 1 - scrollPercentage/100;
+    if (scrollPercentage > 44) {
+      headerDiv.style.height = '0vh';
+    } else {
+      headerDiv.style.height = (44 - scrollPercentage) + 'vh';
+      console.log(headerDiv.style.height);
+    }
+  } else {
+    headerDiv.style.height = 44 + 'vh';
+  }
+});
+
+
 // init GLOBALS
 const map = initializeMap();
 const overnachtingen = [
@@ -20,9 +40,9 @@ const overnachtingen = [
 ]
 const extraInfo = document.getElementById('extra-info');
 const fietsje = L.icon({
-  iconUrl: 'images/fietsje.svg',
-  iconSize: [44, 44],
-  iconAnchor: [22, 22],
+  iconUrl: 'images/ezy.svg',
+  iconSize: [60, 60],
+  iconAnchor: [30, 30],
   tooltipAnchor: [22, 0],
 });
 const tentje = L.icon({
@@ -164,7 +184,7 @@ function animateCampingLocations() {
   // teken alle tentjes buiten het laatste zodat het fietsje goed zichtbaar is
   let i = 0;
   let timer = setInterval(function() {
-  if (i >= overnachtingen.length) {
+  if (i >= overnachtingen.length-1) {
       clearInterval(timer);
       return;
   }
