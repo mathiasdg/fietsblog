@@ -69,7 +69,7 @@ function initializeMap() {
 }
 
 function fetchAndDrawRoute(icon, extraInfo) {
-  fetch("data.gpx")
+  fetch("routes/data.gpx")
     .then((response) => response.text())
     .then((text) => parseAndDrawRoute(icon, extraInfo, text))
     .catch((error) => console.error("Error fetching GPX file:", error));
@@ -84,7 +84,7 @@ function parseAndDrawRoute(icon, extraInfo, gpxText) {
 
 // Other helper functions...
 async function fetchAndParseGpx() {
-  const response = await fetch("data.gpx");
+  const response = await fetch("routes/data.gpx");
   const text = await response.text();
   const parser = new DOMParser();
   const data = parser.parseFromString(text, "text/xml");
