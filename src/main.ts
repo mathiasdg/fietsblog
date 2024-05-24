@@ -1,4 +1,4 @@
-import data from "../../js/overnachtingen.json";
+import data from "../js/overnachtingen.json";
 
 const button = document.querySelector("#nieuw");
 const geoDiv = document.querySelector("#geo");
