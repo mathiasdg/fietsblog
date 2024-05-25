@@ -1,90 +1,72 @@
+import "../styles/index.css";
+import "leaflet-geometryutil";
+import ProgressBar from "progressbar.js";
 /* 
   TODO :
-  - afgelegde route verwijderen na animatie en de volledige tekenen met hoge resolutie (dus alle punten)
-  - extra info aanpassen?
-  - tentjes in beeld laten vliegen
-  - afstand van etappes berekenen en in tooltip zetten
-  - fietsje eventueel laten roteren
+  [x] tentjes in beeld laten vliegen
+  [-] afgelegde route verwijderen na animatie en de volledige tekenen met hoge resolutie (dus alle punten)
+  [-] extra info aanpassen?
+  [-] afstand van etappes berekenen en in tooltip zetten
 */
 
-const headerDiv = document.getElementById("map");
+// init GLOBALS
 const dag = new Date().getDay();
 const ezyOfFiets = dag % 2 ? "ezy" : "fietsje";
-
-console.log(dag);
-
-document.addEventListener("scroll", function (e) {
-  const scrollPercentage =
-    (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-  // console.log('scroll-percentage: ', scrollPercentage.toFixed(0) + '%');
-
-  if (scrollPercentage > 0) {
-    // headerDiv.style.opacity = 1 - scrollPercentage/100;
-    if (scrollPercentage > 44) {
-      headerDiv.style.height = "0vh";
-    } else {
-      headerDiv.style.height = 44 - scrollPercentage + "vh";
-      console.log(headerDiv.style.height);
-    }
-  } else {
-    headerDiv.style.height = 44 + "vh";
-  }
-});
-
-// init GLOBALS
-const map = initializeMap();
 const overnachtingen = [
-  [51.489959, 5.075763],
-  [51.401369, 6.075619],
-  [51.667356, 6.66894],
-  [51.810134, 7.60287],
-  [51.837279, 8.361003],
-  [51.850845, 9.448757],
+  [51.878988, 9.294779],
   [51.918988, 10.294779],
 ];
 const extraInfo = document.getElementById("extra-info");
 const fietsje = L.icon({
-  iconUrl: "images/" + ezyOfFiets + ".svg",
+  iconUrl: "./src/images/" + ezyOfFiets + ".svg",
   iconSize: [60, 60],
   iconAnchor: [30, 30],
   tooltipAnchor: [22, 0],
 });
 const tentje = L.icon({
-  iconUrl: "images/tentie.svg",
+  iconUrl: "./src/images/tentie.svg",
   iconSize: [44, 44],
   iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
 });
+const tilesURL =
+  // "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg";
+  // "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
+  // "https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.jpg";
+  "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
+// "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 
-fetchAndDrawRoute(fietsje, extraInfo);
+// init map
+const map = initializeMap();
+processData();
 
+setTimeout(animateCampingLocations, 2690);
+
+/**
+ * functie declaraties
+ */
+/**
+ * Initializes a Leaflet map and adds the OpenStreetMap tile layer to it.
+ *
+ * @returns {L.Map} The initialized Leaflet map.
+ */
 function initializeMap() {
   const map = L.map("map");
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer(tilesURL, {
     maxZoom: 19,
     attribution:
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
+
   return map;
 }
 
-function fetchAndDrawRoute(icon, extraInfo) {
-  fetch("routes/data.gpx")
-    .then((response) => response.text())
-    .then((text) => parseAndDrawRoute(icon, extraInfo, text))
-    .catch((error) => console.error("Error fetching GPX file:", error));
-}
-
-function parseAndDrawRoute(icon, extraInfo, gpxText) {
-  const parser = new DOMParser();
-  const data = parser.parseFromString(gpxText, "text/xml");
-  const items = data.getElementsByTagName("trkpt");
-  // Remaining logic for parsing and drawing the route...
-}
-
-// Other helper functions...
+/**
+ * Fetches and parses a GPX file from the "data/data.gpx" URL.
+ * @returns {HTMLCollection} The collection of track point elements from the parsed GPX data.
+ */
 async function fetchAndParseGpx() {
-  const response = await fetch("routes/data.gpx");
+  const response = await fetch("data/data.gpx");
   const text = await response.text();
   const parser = new DOMParser();
   const data = parser.parseFromString(text, "text/xml");
@@ -92,6 +74,13 @@ async function fetchAndParseGpx() {
   return data.getElementsByTagName("trkpt");
 }
 
+/**
+ * Processes the data fetched and parsed from a GPX file, calculates the total distance of the route, finds the closest point to the last sleeping location, and animates the route on a map.
+ *
+ * @async
+ * @function processData
+ * @returns {void}
+ */
 async function processData() {
   const items = await fetchAndParseGpx();
   const latLngsTotaleRoute = [];
@@ -105,7 +94,6 @@ async function processData() {
     items[0].getAttribute("lon"),
   ];
 
-  // map.setView([0,0], 13);
   map.setView([laatsteSlaapplek[0], laatsteSlaapplek[1]], 13);
 
   for (let i = 0; i < items.length; ++i) {
@@ -137,26 +125,19 @@ async function processData() {
     vorige_punt = coordinate;
   }
 
-  console.log(afstand, " in meters?");
-  console.log(dichtstePunt);
-
   // maak path van volledige route en teken op map
   const totaleRoute = L.polyline(latLngsTotaleRoute, {
     color: "#ff6944",
     opacity: 0.69,
   }).addTo(map);
   const lengteTotaleRoute = L.GeometryUtil.length(totaleRoute);
+  // console.log(lengteTotaleRoute / 1000);
 
   // const punde = L.point(laatsteSlaapplek);
   // const dichtstePunt = totaleRoute.closestLayerPoint(map.latLngToLayerPoint(laatsteSlaapplek));
 
   const indexOfDichtstePunt = latLngsTotaleRoute.indexOf(dichtstePunt);
-  console.log(indexOfDichtstePunt);
-  const percy_in_array = (
-    (indexOfDichtstePunt / latLngsTotaleRoute.length) *
-    100
-  ).toFixed(2);
-  const latLngsTotaleAfgelegdeRoute = latLngsTotaleRoute.slice(
+  const latLngsAfgelegdeRoute = latLngsTotaleRoute.slice(
     0,
     indexOfDichtstePunt + 1
   );
@@ -174,11 +155,11 @@ async function processData() {
 
   const lengteAfgelegdeRoute = animateRoute(
     afgelegdeRoute,
-    latLngsTotaleAfgelegdeRoute,
+    latLngsAfgelegdeRoute,
     fietsMarker
   );
 
-  console.log(lengteAfgelegdeRoute / 1000);
+  console.log(lengteAfgelegdeRoute);
   console.log(
     ((lengteAfgelegdeRoute / lengteTotaleRoute) * 100).toFixed(2),
     "%"
@@ -187,12 +168,16 @@ async function processData() {
   map.fitBounds(totaleRoute.getBounds());
 }
 
-// Call processData function to start the process
-processData();
-
-setTimeout(animateCampingLocations, 2690);
-
+/**
+ * Animates a route on a map by adding each coordinate in the route to the map's polyline and updating the position of a marker.
+ *
+ * @param {L.Polyline} route - The Leaflet polyline object representing the route to be animated.
+ * @param {L.LatLng[]} routeCoordinates - An array of latitude and longitude coordinates representing the route.
+ * @param {L.Marker} marker - The Leaflet marker object to be animated along the route.
+ * @returns {number} The length of the animated route in meters.
+ */
 function animateRoute(route, routeCoordinates, marker) {
+  console.log(route);
   let i = 0;
   let timer = setInterval(function () {
     if (i >= routeCoordinates.length) {
@@ -207,6 +192,11 @@ function animateRoute(route, routeCoordinates, marker) {
   const lengteAfgelegdeRoute = L.GeometryUtil.length(route);
   return lengteAfgelegdeRoute;
 }
+/**
+ * Animates the display of camping locations on the map.
+ * This function iterates through the `overnachtingen` array, which contains the coordinates of camping locations, and adds a marker for each location to the map. The markers are displayed with a tooltip that shows the etappe number and the distance information.
+ * The animation is achieved by using a setInterval function that adds a new marker every 111 milliseconds, until all markers have been added.
+ */
 function animateCampingLocations() {
   // teken alle tentjes buiten het laatste zodat het fietsje goed zichtbaar is
   let i = 0;
@@ -248,18 +238,19 @@ bar.animate(0.39); // Value from 0.0 to 1.0
 const afgelegde_km = 686;
 const tot_km = 1769;
 
-const intID = setInterval(function () {
+const intervalID = setInterval(function () {
   bar.setText((bar.value() * 100).toFixed(0) + "%");
-  extraInfo.textContent =
+  extraInfo.innerHTML =
     "Reeds bestierde afstand: " +
     (bar.value() * tot_km).toFixed(0) +
-    "km van de in totaal " +
+    " van de  " +
     tot_km +
-    "km";
+    " kilometer <i class='icofont-bull'></i>" +
+    "<img src='./src/images/bull.svg'/>";
 }, 10);
 
 setTimeout(function () {
-  clearInterval(intID);
+  clearInterval(intervalID);
 }, 3369);
 
 /*
@@ -418,4 +409,24 @@ function deg2rad(deg) {
 //     gpx.parse(gpxData);
 //     drawTrack(gpx.tracks[0]);
 //     document.getElementById("lastUpdate").innerText = gpx.tracks[0].points.at(-1).time.toLocaleString();
+// });
+
+// scroll lines voor als de blog er terug bij is
+
+// document.addEventListener("scroll", function (e) {
+//   const scrollPercentage =
+//     (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+//   // console.log('scroll-percentage: ', scrollPercentage.toFixed(0) + '%');
+
+//   if (scrollPercentage > 0) {
+//     // headerDiv.style.opacity = 1 - scrollPercentage/100;
+//     if (scrollPercentage > 44) {
+//       headerDiv.style.height = "0vh";
+//     } else {
+//       headerDiv.style.height = 44 - scrollPercentage + "vh";
+//       console.log(headerDiv.style.height);
+//     }
+//   } else {
+//     headerDiv.style.height = 44 + "vh";
+//   }
 // });

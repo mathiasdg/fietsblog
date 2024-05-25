@@ -1,0 +1,104 @@
+/* Resetting padding and margin */
+* {
+  padding: 0;
+  margin: 0;
+}
+
+/* Body Styling */
+body {
+  background-color: #d2b62d;
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Map Styling */
+#map {
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+}
+
+/* Progress Section Styling */
+#progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+/* Progress Bar Styling */
+#bar {
+  position: absolute;
+  bottom: 0;
+  height: 3vh;
+  z-index: 69;
+}
+
+#extra-info {
+  position: absolute;
+  top: 0;
+  padding: 11px 22px;
+  font-size: 11pt;
+  background-color: rgba(17, 105, 68, 0.69);
+  border-radius: 0 0 16px 16px;
+  z-index: 69;
+}
+
+#extra-info img {
+  vertical-align: text-bottom;
+  height: 1.6em;
+}
+
+/* Progress Bar Text Styling */
+.progressbar-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fad729;
+  width: 100vw;
+  margin-top: 4px;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* Miscellaneous Styling */
+.oop {
+  position: relative;
+  height: 10px;
+  background: linear-gradient(141deg, #48ded4 0%, #a026bf 51%, #e82c75 75%);
+}
+
+/* Media Queries for Responsiveness */
+/* Smartphone landscape format */
+@media (max-width: 969px) {
+  #bar {
+    height: 33px;
+  }
+  #extra-info {
+    font-size: 10pt;
+    font-weight: 600;
+  }
+  .progressbar-text {
+    font-size: 11pt;
+    margin-top: 6px;
+  }
+}
+
+/* Smartphone portrait format */
+@media (max-width: 444px) {
+  #bar {
+    height: 36px;
+  }
+  #extra-info {
+    width: 60vw;
+    font-size: 9pt;
+    font-weight: 800;
+    text-align: center;
+  }
+  .progressbar-text {
+    font-size: 11pt;
+    font-weight: 900;
+    margin-top: 9px;
+  }
+}
