@@ -1,5 +1,5 @@
 // vite.config.js
-import basicSsl from "@vitejs/plugin-basic-ssl";
+// import basicSsl from "@vitejs/plugin-basic-ssl";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -9,14 +9,14 @@ export default defineConfig({
   server: {
     open: true,
   },
-  plugins: [
-    basicSsl({
-      /** name of certification */
-      name: "test",
-      /** custom trust domains */
-      domains: ["*.custom.com"],
-      /** custom certification directory */
-      certDir: "/Users/.../.devServer/cert",
-    }),
-  ],
+  // plugins: [
+  //   basicSsl({
+  //     /** name of certification */
+  //     name: "test",
+  //     /** custom trust domains */
+  //     domains: ["*.custom.com"],
+  //     /** custom certification directory */
+  //     certDir: "/Users/.../.devServer/cert",
+  //   }),
+  // ],
 });

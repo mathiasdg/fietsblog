@@ -31,7 +31,7 @@ body {
 #bar {
   position: absolute;
   bottom: 0;
-  height: 3vh;
+  height: 33px;
   z-index: 69;
 }
 
@@ -55,7 +55,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  color: #fad729;
+  color: #f1d962;
   width: 100vw;
   margin-top: 4px;
   font-weight: 900;
