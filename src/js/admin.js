@@ -1,6 +1,16 @@
-import data from "./overnachtingen.json";
+// import data from "./overnachtingen.json";
 
-// const slaapPlekken = data.slaapCoordinaten;
+const slaapPlekken = await fetchOvernachtingenData();
+// console.log(overnachtingen);
+
+// fetch de overnachtingen uit de dynamiosche json file
+async function fetchOvernachtingenData() {
+  const response = await fetch('/overnachtingen.json');
+  const data = await response.json();
+  return data;
+}
+
+// console.log(slaapPlekken);  
 const button = document.querySelector("#nieuw");
 const geoDiv = document.querySelector("#geo");
 
@@ -14,30 +24,31 @@ if (geoDiv) {
 
 button.addEventListener("click", (event) => {
   event.preventDefault();
+
   navigator.geolocation.getCurrentPosition((position) => {
-    data.slaapCoordinaten.push([
-      position.timestamp,
+    slaapPlekken.slaapCoordinaten.push([
       position.coords.latitude,
-      position.coords.longitude,
-      position.coords.accuracy,
+      position.coords.longitude
+      // position.coords.accuracy,
+      // position.timestamp,
     ]);
 
-    console.log(data.slaapCoordinaten);
+    // console.log(slaapPlekken.slaapCoordinaten);
 
-    fetch("../../addSleepSpot.php", {
+    fetch("http://localhost/fietsblog/addSleepSpot.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(slaapPlekken),
     })
       .then((response) => {
         console.log(response.status);
-        return response.json(); // Make sure to handle the JSON response correctly
+        // return response.json(); // Make sure to handle the JSON response correctly
       })
-      .then((responseData) => {
-        console.log("Response data:", responseData.overnachtingen);
-      })
+      // .then((responseData) => {
+      //   console.log("Response data:", responseData.overnachtingen);
+      // })
       .catch((error) => {
         console.error("Error:", error);
       });

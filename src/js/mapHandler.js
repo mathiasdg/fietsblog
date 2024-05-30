@@ -1,23 +1,33 @@
-import slaapPlekken from "./overnachtingen.json";
+// import slaapPlekken from "./overnachtingen.json";
 import { getDistanceFromLatLonInKm, getEuclideanDistance } from "./utils";
 
 // Constants and Globals
 const dag = new Date().getDay();
 const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
-const overnachtingen = slaapPlekken.slaapCoordinaten;
+// const overnachtingen = slaapPlekken.slaapCoordinaten;
+const overnachtingen = await fetchOvernachtingenData();
+// console.log(overnachtingen);
+
+// fetch de overnachtingen uit de dynamiosche json file
+async function fetchOvernachtingenData() {
+  const response = await fetch('/overnachtingen.json');
+  const data = await response.json();
+  return data.slaapCoordinaten;
+}
+
 
 const tilesURL =
   "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
 
 // Icons
 const fietsjeIcon = L.icon({
-  iconUrl: `./src/images/${ezyOrFiets}.svg`,
+  iconUrl: `/images/${ezyOrFiets}.svg`,
   iconSize: [60, 60],
   iconAnchor: [30, 30],
   tooltipAnchor: [22, 0],
 });
 const tentjeIcon = L.icon({
-  iconUrl: "./src/images/tentie.svg",
+  iconUrl: "./images/tentie.svg",
   iconSize: [44, 44],
   iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
@@ -27,7 +37,7 @@ class MapHandler {
   constructor() {
     this.map = this.initializeMap();
     // this.processData();
-    setTimeout(this.animateCampingLocations.bind(this), 2690);
+    setTimeout(this.animateCampingLocations.bind(this), 3690);
   }
 
   initializeMap() {
@@ -39,6 +49,7 @@ class MapHandler {
     }).addTo(map);
     return map;
   }
+
 
   async fetchAndParseGpx() {
     const response = await fetch("/data/data.gpx");
@@ -135,7 +146,8 @@ class MapHandler {
     //   "%"
     // );
 
-    this.map.fitBounds(totaleRoute.getBounds());
+    this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
+    // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
     this.animateRoute(
       afgelegdeRouteVoorAnimatie,
@@ -145,7 +157,7 @@ class MapHandler {
     setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-    }, 3333);
+    }, 3690);
 
     return {
       lengteTotaleRoute,
@@ -172,8 +184,8 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 9);
 
-      i += 52;
-    }, 16);
+      i += 7;
+    }, 9);
   }
 
   animateCampingLocations() {
@@ -184,13 +196,14 @@ class MapHandler {
         return;
       }
       const campingCoordinates = overnachtingen[i];
-      const tooltipText = `etappe ${
-        i + 1
-      }<br>afstand : ${null}<br> totaal bestierde afstand: ${null}`;
-      L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
+      const tooltipText = `etappe ${i + 1}
+      <br>afstand : ${null}<br> totaal bestierde afstand: ${null}
+      <br>${campingCoordinates}`;
+      
+      L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map)
       // .bindTooltip(tooltipText);
       i++;
-    }, 169);
+    }, 269);
   }
 }
 
