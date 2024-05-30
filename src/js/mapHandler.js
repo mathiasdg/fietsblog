@@ -185,7 +185,7 @@ class MapHandler {
       // this.map.setView(routeCoordinates[i], 9);
 
       i += 7;
-    }, 9);
+    }, 6);
   }
 
   animateCampingLocations() {

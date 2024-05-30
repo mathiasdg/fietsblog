@@ -11,7 +11,7 @@ $json_data = file_get_contents('php://input');
 // print_r($json_data);
 
 // Check if the file was successfully written
-if (file_put_contents('public/overnachtingen.json', $json_data)) {
+if (file_put_contents('/overnachtingen.json', $json_data)) {
   // Set Content-Type to application/json
   header('Content-Type: application/json');
   // Return the JSON data
