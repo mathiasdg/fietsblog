@@ -3,12 +3,15 @@
 header("Access-Control-Allow-Origin: *");  // Allow requests from any origin
 header("Access-Control-Allow-Methods: POST");  // Allow POST requests
 header("Access-Control-Allow-Headers: Content-Type");  // Allow Content-Type header
+header('Content-Type: application/json');
 
 // Read the incoming JSON data
 $json_data = file_get_contents('php://input');
 
+// print_r($json_data);
+
 // Check if the file was successfully written
-if (file_put_contents('./js/overnachtingen.json', $json_data)) {
+if (file_put_contents('public/overnachtingen.json', $json_data)) {
   // Set Content-Type to application/json
   header('Content-Type: application/json');
   // Return the JSON data

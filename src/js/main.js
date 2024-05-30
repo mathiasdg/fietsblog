@@ -11,16 +11,17 @@ const maphandy = new MapHandler();
 const routeData = await maphandy.processData();
 // maphandy.processData(); // tweede achtervolger => Eefke
 
-const totaalKilometers = (routeData.lengteTotaleRoute / 1000).toFixed(0);
-const afgelegdeKilometers = (routeData.lengteAfgelegdeRoute / 1000).toFixed(0);
+const totaalKilometers = (Number) (routeData.lengteTotaleRoute / 1000).toFixed(0);
+let afgelegdeKilometers = (Number) ((routeData.lengteAfgelegdeRoute / 1000).toFixed(0));
+afgelegdeKilometers = afgelegdeKilometers + 52; // +20km voor Lier-Mechelen
 const afgelegdPercentage = (
-  routeData.lengteAfgelegdeRoute / routeData.lengteTotaleRoute
+  afgelegdeKilometers / totaalKilometers
 ).toFixed(2);
 
 // Initialize ProgressBar
 const bar = new ProgressBar.Line("#bar", {
   easing: "easeOut",
-  duration: 3333,
+  duration: 3690,
   color: "#116944",
   trailColor: "#ff6944",
   svgStyle: { width: "100%", height: "100%" },
@@ -28,11 +29,12 @@ const bar = new ProgressBar.Line("#bar", {
     style: null,
   },
 });
-bar.animate(afgelegdPercentage); // Value from 0.0 to 1.0
+bar.animate(afgelegdPercentage);
 
 const intervalID = setInterval(() => {
   bar.setText(`${(bar.value() * 100).toFixed(0)}%`);
-  extraInfo.innerHTML = `Reeds bestierde afstand: ${afgelegdeKilometers} van de ${totaalKilometers} kilometer <img src='/images/bull.svg'/>`;
+  const afgelegdeKilis = (bar.value() * totaalKilometers).toFixed(0);
+  extraInfo.innerHTML = `Reeds bestierde afstand: ${afgelegdeKilis} van de ${totaalKilometers} kilometer <img src='/images/bull.svg'/>`;
 }, 10);
 
 setTimeout(() => clearInterval(intervalID), 3369);
