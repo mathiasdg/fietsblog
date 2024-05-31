@@ -37,7 +37,7 @@ class MapHandler {
   constructor() {
     this.map = this.initializeMap();
     // this.processData();
-    setTimeout(this.animateCampingLocations.bind(this), 3690);
+    setTimeout(this.animateCampingLocations.bind(this), 5000);
   }
 
   initializeMap() {
@@ -105,12 +105,6 @@ class MapHandler {
       vorigePunt = coordinate;
     }
 
-    // console.log(
-    //   `Afstand: ${afstand.toFixed(2)} km, minDist: ${minDist.toFixed(
-    //     2
-    //   )} km, dichtstePunt: ${dichtstePunt}`
-    // );
-
     const totaleRoute = L.polyline(latLngsTotaleRoute, {
       color: "#ff6944",
       opacity: 0.69,
@@ -140,12 +134,6 @@ class MapHandler {
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
-    // console.log(lengteAfgelegdeRoute / 1000 + " km");
-    // console.log(
-    //   ((lengteAfgelegdeRoute / lengteTotaleRoute) * 100).toFixed(2),
-    //   "%"
-    // );
-
     this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
@@ -157,7 +145,7 @@ class MapHandler {
     setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-    }, 3690);
+    }, 5000);
 
     return {
       lengteTotaleRoute,
@@ -182,9 +170,9 @@ class MapHandler {
       }
       route.addLatLng(routeCoordinates[i]);
       marker.setLatLng(routeCoordinates[i]);
-      // this.map.setView(routeCoordinates[i], 9);
+      // this.map.setView(routeCoordinates[i], 8);
 
-      i += 7;
+      i += 6;
     }, 6);
   }
 
@@ -199,11 +187,11 @@ class MapHandler {
       const tooltipText = `etappe ${i + 1}
       <br>afstand : ${null}<br> totaal bestierde afstand: ${null}
       <br>${campingCoordinates}`;
-      
-      L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map)
+
+      L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
       // .bindTooltip(tooltipText);
       i++;
-    }, 269);
+    }, 300);
   }
 }
 
