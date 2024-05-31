@@ -34,7 +34,7 @@ bar.animate(afgelegdPercentage);
 const intervalID = setInterval(() => {
   bar.setText(`${(bar.value() * 100).toFixed(0)}%`);
   const afgelegdeKilis = (bar.value() * totaalKilometers).toFixed(0);
-  extraInfo.innerHTML = `Reeds bestierde afstand: ${afgelegdeKilis} van de ${totaalKilometers} kilometer <img src='/images/bull.svg'/>`;
+  extraInfo.innerHTML = `Reeds bestierde afstand: <b>${afgelegdeKilis}</b> van de ${totaalKilometers} kilometer <img src='/images/bull.svg'/>`;
 }, 10);
 
-setTimeout(() => clearInterval(intervalID), 3369);
+setTimeout(() => clearInterval(intervalID), 4444);
