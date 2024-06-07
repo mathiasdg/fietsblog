@@ -21,7 +21,7 @@ const afgelegdPercentage = (
 // Initialize ProgressBar
 const bar = new ProgressBar.Line("#bar", {
   easing: "easeOut",
-  duration: 3690,
+  duration: 4690,
   color: "#116944",
   trailColor: "#ff6944",
   svgStyle: { width: "100%", height: "100%" },
@@ -37,4 +37,4 @@ const intervalID = setInterval(() => {
   extraInfo.innerHTML = `Reeds bestierde afstand: <b>${afgelegdeKilis}</b> van de ${totaalKilometers} kilometer <img src='/images/bull.svg'/>`;
 }, 10);
 
-setTimeout(() => clearInterval(intervalID), 4444);
+setTimeout(() => clearInterval(intervalID), 5000);
