@@ -8,10 +8,11 @@ header('Content-Type: application/json');
 // Read the incoming JSON data
 $json_data = file_get_contents('php://input');
 
-// print_r($json_data);
+// Dynamically determine the path to the JSON file in the public directory
+$jsonFilePath = __DIR__ . '/overnachtingen.json';
 
 // Check if the file was successfully written
-if (file_put_contents('/overnachtingen.json', $json_data)) {
+if (file_put_contents($jsonFilePath, $json_data)) {
   // Set Content-Type to application/json
   header('Content-Type: application/json');
   // Return the JSON data

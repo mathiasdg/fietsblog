@@ -32,12 +32,18 @@ const tentjeIcon = L.icon({
   iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
 });
+const finishIcon = L.icon({
+  iconUrl: "./images/finish.png",
+  iconSize: [33, 33],
+  iconAnchor: [15, 30],
+  // tooltipAnchor: [16, 0],
+});
 
 class MapHandler {
   constructor() {
     this.map = this.initializeMap();
     // this.processData();
-    setTimeout(this.animateCampingLocations.bind(this), 5000);
+    setTimeout(this.animateCampingLocations.bind(this), 6900);
   }
 
   initializeMap() {
@@ -49,7 +55,6 @@ class MapHandler {
     }).addTo(map);
     return map;
   }
-
 
   async fetchAndParseGpx() {
     const response = await fetch("/data/data.gpx");
@@ -77,8 +82,6 @@ class MapHandler {
       items[0].getAttribute("lat"),
       items[0].getAttribute("lon"),
     ];
-
-    // this.map.setView([laatsteSlaapplek[0], laatsteSlaapplek[1]], 13);
 
     for (let i = 0; i < items.length; ++i) {
       const coordinate = [
@@ -128,24 +131,31 @@ class MapHandler {
       weight: 6.9,
     }).addTo(this.map);
 
+    const eindPunt = latLngsTotaleRoute[latLngsTotaleRoute.length - 1];
+    const eindPuntMarker = L.marker(eindPunt, {
+      icon: finishIcon,
+    }).addTo(this.map);
+
     const fietsMarker = L.marker(latLngsTotaleRoute[0], {
       icon: fietsjeIcon,
     }).addTo(this.map);
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
-    this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
-    // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
-
     this.animateRoute(
       afgelegdeRouteVoorAnimatie,
       latLngsAfgelegdeRoute,
       fietsMarker
     );
-    setInterval(() => {
+    const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-    }, 5000);
+      this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
+    }, 6000);
+    setTimeout(() => clearInterval(intervalID), 6900);
+
+    // this.map.fitBounds(route.getBounds(), { padding: [69, 69] });
+    // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
     return {
       lengteTotaleRoute,
@@ -170,10 +180,11 @@ class MapHandler {
       }
       route.addLatLng(routeCoordinates[i]);
       marker.setLatLng(routeCoordinates[i]);
-      // this.map.setView(routeCoordinates[i], 8);
+      this.map.setView(routeCoordinates[i], 8);
 
-      i += 6;
-    }, 6);
+      i += 16;
+    }, 3);
+    // this.map.fitBounds(route.getBounds(), { padding: [69, 69] });
   }
 
   animateCampingLocations() {
@@ -191,7 +202,7 @@ class MapHandler {
       L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
       // .bindTooltip(tooltipText);
       i++;
-    }, 300);
+    }, 269);
   }
 }
 
