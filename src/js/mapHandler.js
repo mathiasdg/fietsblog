@@ -154,7 +154,7 @@ class MapHandler {
     }, 6000);
     setTimeout(() => clearInterval(intervalID), 6900);
 
-    // this.map.fitBounds(route.getBounds(), { padding: [69, 69] });
+    // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
     return {
@@ -180,7 +180,7 @@ class MapHandler {
       }
       route.addLatLng(routeCoordinates[i]);
       marker.setLatLng(routeCoordinates[i]);
-      this.map.setView(routeCoordinates[i], 8);
+      this.map.setView(routeCoordinates[i], 7.69);
 
       i += 16;
     }, 3);
@@ -202,7 +202,7 @@ class MapHandler {
       L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
       // .bindTooltip(tooltipText);
       i++;
-    }, 269);
+    }, 169);
   }
 }
 
