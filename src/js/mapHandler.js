@@ -182,8 +182,8 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       this.map.setView(routeCoordinates[i], 7.69);
 
-      i += 16;
-    }, 3);
+      i += 19;
+    }, 2);
     // this.map.fitBounds(route.getBounds(), { padding: [69, 69] });
   }
 
