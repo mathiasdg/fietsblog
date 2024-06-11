@@ -22,14 +22,14 @@ const tilesURL =
 // Icons
 const fietsjeIcon = L.icon({
   iconUrl: `/images/${ezyOrFiets}.svg`,
-  iconSize: [60, 60],
-  iconAnchor: [30, 30],
-  tooltipAnchor: [22, 0],
+  iconSize: [44, 44],
+  iconAnchor: [22, 22],
+  tooltipAnchor: [16, 0],
 });
 const tentjeIcon = L.icon({
   iconUrl: "./images/tentie.svg",
-  iconSize: [44, 44],
-  iconAnchor: [22, 22],
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
   tooltipAnchor: [16, 0],
 });
 const finishIcon = L.icon({
@@ -150,11 +150,11 @@ class MapHandler {
     const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-      this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
+      this.map.fitBounds(totaleRoute.getBounds(), { padding: [69, 69] });
     }, 6000);
     setTimeout(() => clearInterval(intervalID), 6900);
 
-    // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
+    this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
     return {
@@ -180,11 +180,10 @@ class MapHandler {
       }
       route.addLatLng(routeCoordinates[i]);
       marker.setLatLng(routeCoordinates[i]);
-      this.map.setView(routeCoordinates[i], 7.69);
+      // this.map.setView(routeCoordinates[i], 7.69);
 
       i += 19;
     }, 2);
-    // this.map.fitBounds(route.getBounds(), { padding: [69, 69] });
   }
 
   animateCampingLocations() {
