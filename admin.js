@@ -1,6 +1,43 @@
 const button = document.querySelector("#nieuw");
 const coordsInput = document.querySelector("#coords");
 const feedbackDiv = document.querySelector("#feedback");
+const map = document.querySelector("#map");
+let deviceCoords = null;
+
+navigator.geolocation.getCurrentPosition(
+  (position) => {
+    deviceCoords = [
+      position.coords.latitude,
+      position.coords.longitude,
+      // position.coords.accuracy,
+      // position.timestamp,
+    ];
+    // console.log(deviceCoords);
+    coordsInput.value = deviceCoords;
+    initMap();
+  },
+  (error) => {
+    console.error(error);
+  }
+);
+
+function initMap() {
+  const mapz = L.map("map").setView(deviceCoords, 11);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+  }).addTo(mapz);
+  L.marker(deviceCoords).addTo(mapz);
+
+  return mapz;
+}
+
+// setTimeout(() => {
+//   initMap();
+// }, 3690);
+
+
 
 // fetch de overnachtingen uit de dynamische json file
 async function fetchData() {
