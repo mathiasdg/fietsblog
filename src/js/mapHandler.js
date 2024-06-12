@@ -17,7 +17,8 @@ async function fetchOvernachtingenData() {
 
 
 const tilesURL =
-  "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
+  // "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
+  "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
 
 // Icons
 const fietsjeIcon = L.icon({
@@ -182,7 +183,7 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 7.69);
 
-      i += 19;
+      i += 22;
     }, 2);
   }
 
@@ -201,7 +202,7 @@ class MapHandler {
       L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
       // .bindTooltip(tooltipText);
       i++;
-    }, 169);
+    }, 69);
   }
 }
 
