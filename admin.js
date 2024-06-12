@@ -28,7 +28,20 @@ function initMap() {
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 18,
   }).addTo(mapz);
-  L.marker(deviceCoords).addTo(mapz);
+  let marker = L.marker(deviceCoords).addTo(mapz);
+
+  // Add marker on click
+  mapz.on("click", function (e) {
+    const { lat, lng } = e.latlng;
+    if (marker) {
+      marker.setLatLng(e.latlng);
+    } else {
+      marker = L.marker([lat, lng]).addTo(mapz);
+    }
+    // console.log(`Clicked at ${lat}, ${lng}`);
+    mapz.setView([lat, lng], mapz.getZoom());
+    coordsInput.value = [lat, lng].toString();
+  });
 
   return mapz;
 }
