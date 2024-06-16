@@ -11,9 +11,9 @@ const maphandy = new MapHandler();
 const routeData = await maphandy.processData();
 // maphandy.processData(); // tweede achtervolger => Eefke
 
-const totaalKilometers = (Number) (routeData.lengteTotaleRoute / 1000).toFixed(0);
+const totaalKilometers = Number(routeData.lengteTotaleRoute / 1000).toFixed(0);
 let afgelegdeKilometers = (Number) ((routeData.lengteAfgelegdeRoute / 1000).toFixed(0));
-afgelegdeKilometers = afgelegdeKilometers + 52; // +20km voor Lier-Mechelen
+afgelegdeKilometers = afgelegdeKilometers; // +20km voor Lier-Mechelen
 const afgelegdPercentage = (
   afgelegdeKilometers / totaalKilometers
 ).toFixed(2);
