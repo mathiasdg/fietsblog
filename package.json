@@ -1,7 +1,7 @@
 {
   "name": "fietsblog",
   "private": true,
-  "version": "0.69.0",
+  "version": "1.69.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "leaflet-geometryutil": "^0.10.3",
-    "progressbar.js": "^1.1.1",
-    "vite": "^5.2.11"
+    "progressbar.js": "^1.1.1"
   }
 }

@@ -17,8 +17,11 @@ async function fetchOvernachtingenData() {
 
 
 const tilesURL =
-  // "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
-  "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
+  "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
+// "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
+// "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
+// "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}{r}.jpg";
+// "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";<
 
 // Icons
 const fietsjeIcon = L.icon({
@@ -42,6 +45,8 @@ const finishIcon = L.icon({
 
 class MapHandler {
   constructor() {
+    this.telAfstand;
+    this.telEtappeAfstand;
     this.map = this.initializeMap();
     // this.processData();
     setTimeout(this.animateCampingLocations.bind(this), 6900);
@@ -78,7 +83,7 @@ class MapHandler {
     }
     let minDist = Infinity;
     let dichtstePunt;
-    let afstand = 0;
+    // let afstand = 0;
     let vorigePunt = [
       items[0].getAttribute("lat"),
       items[0].getAttribute("lon"),
@@ -90,20 +95,21 @@ class MapHandler {
         items[i].getAttribute("lon"),
       ];
 
-      if (i !== 0) {
-        afstand += getDistanceFromLatLonInKm(
-          vorigePunt[0],
-          vorigePunt[1],
-          coordinate[0],
-          coordinate[1]
-        );
-      }
+      // if (i !== 0) {
+      //   afstand += getDistanceFromLatLonInKm(
+      //     vorigePunt[0],
+      //     vorigePunt[1],
+      //     coordinate[0],
+      //     coordinate[1]
+      //   );
+      // }
 
       const dist = getEuclideanDistance(coordinate, laatsteSlaapplek);
       if (dist < minDist) {
         minDist = dist;
         dichtstePunt = coordinate;
       }
+      // console.log(dist);
 
       latLngsTotaleRoute.push(coordinate);
       vorigePunt = coordinate;
@@ -114,7 +120,6 @@ class MapHandler {
       opacity: 0.69,
     }).addTo(this.map);
     const lengteTotaleRoute = L.GeometryUtil.length(totaleRoute);
-    // console.log(lengteTotaleRoute / 1000 + " km");
 
     const indexOfDichtstePunt = latLngsTotaleRoute.indexOf(dichtstePunt);
     const latLngsAfgelegdeRoute = latLngsTotaleRoute.slice(
