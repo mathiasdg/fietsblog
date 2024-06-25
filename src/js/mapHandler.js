@@ -1,7 +1,7 @@
-// import slaapPlekken from "./overnachtingen.json";
 import { getDistanceFromLatLonInKm, getEuclideanDistance } from "./utils";
 
 // Constants and Globals
+const animationDuration = 5555;
 const dag = new Date().getDay();
 const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
 // const overnachtingen = slaapPlekken.slaapCoordinaten;
@@ -10,11 +10,10 @@ const overnachtingen = await fetchOvernachtingenData();
 
 // fetch de overnachtingen uit de dynamiosche json file
 async function fetchOvernachtingenData() {
-  const response = await fetch('/overnachtingen.json');
+  const response = await fetch("/overnachtingen.json");
   const data = await response.json();
   return data.slaapCoordinaten;
 }
-
 
 const tilesURL =
   "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
@@ -30,18 +29,30 @@ const fietsjeIcon = L.icon({
   iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
 });
-const tentjeIcon = L.icon({
-  iconUrl: "./images/tentie.svg",
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
+// const tentjeIcon = L.icon({
+//   iconUrl: "./images/tentie.svg",
+//   iconSize: [33, 33],
+//   iconAnchor: [16, 16],
+//   tooltipAnchor: [16, 0],
+//   className: "tentie",
+// });
+const tentjeIcon = L.divIcon({
+  iconSize: [44, 44],
+  iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
+  html: '<div class="marker animate__animated animate__bounceInDown"></div>',
 });
 const finishIcon = L.icon({
   iconUrl: "./images/finish.png",
   iconSize: [33, 33],
   iconAnchor: [15, 30],
-  // tooltipAnchor: [16, 0],
 });
+// const fireworksIcon = L.icon({
+//   iconUrl: "./images/vuurwerk.gif",
+//   iconSize: [33, 33],
+//   iconAnchor: [15, 30],
+//   tooltipAnchor: [16, 0],
+// });
 
 class MapHandler {
   constructor() {
@@ -49,13 +60,15 @@ class MapHandler {
     this.telEtappeAfstand;
     this.map = this.initializeMap();
     // this.processData();
-    setTimeout(this.animateCampingLocations.bind(this), 6900);
+    setTimeout(
+      this.animateCampingLocations.bind(this),
+      animationDuration - 2000
+    );
   }
 
   initializeMap() {
     const map = L.map("map");
     L.tileLayer(tilesURL, {
-      maxZoom: 19,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
@@ -138,13 +151,34 @@ class MapHandler {
     }).addTo(this.map);
 
     const eindPunt = latLngsTotaleRoute[latLngsTotaleRoute.length - 1];
-    const eindPuntMarker = L.marker(eindPunt, {
+    L.marker(eindPunt, {
       icon: finishIcon,
     }).addTo(this.map);
+
+    // L.polylineDecorator(totaleRoute, {
+    //   patterns: [
+    //     {
+    //       offset: "100%",
+    //       repeat: 22,
+    //       symbol: L.Symbol.marker({
+    //         rotate: false,
+    //         markerOptions: {
+    //           icon: L.icon({
+    //             iconUrl: "./images/vuurwerk.gif",
+    //             iconSize: [369, 369],
+    //           }),
+    //         },
+    //       }),
+    //     },
+    //   ],
+    // });
+    // .addTo(this.map);
 
     const fietsMarker = L.marker(latLngsTotaleRoute[0], {
       icon: fietsjeIcon,
     }).addTo(this.map);
+
+    // fietsMarker.setOpacity(0.3);
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
@@ -155,10 +189,12 @@ class MapHandler {
     );
     const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
+      this.map.removeLayer(fietsMarker);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-      this.map.fitBounds(totaleRoute.getBounds(), { padding: [69, 69] });
-    }, 6000);
-    setTimeout(() => clearInterval(intervalID), 6900);
+      // this.map.fitBounds(totaleRoute.getBounds(), { padding: [69, 69] });
+      this.map.setView(eindPunt, 9);
+    }, animationDuration);
+    setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
     this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
@@ -188,12 +224,13 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 7.69);
 
-      i += 22;
-    }, 2);
+      i += 69;
+    }, 3);
   }
 
   animateCampingLocations() {
     let i = 0;
+
     const timer = setInterval(() => {
       if (i >= overnachtingen.length - 1) {
         clearInterval(timer);
@@ -205,9 +242,11 @@ class MapHandler {
       <br>${campingCoordinates}`;
 
       L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
+
       // .bindTooltip(tooltipText);
+
       i++;
-    }, 69);
+    }, 111);
   }
 }
 
