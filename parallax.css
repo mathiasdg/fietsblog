@@ -7,9 +7,36 @@
 }
 
 body {
+  overflow-x: hidden;
   font-family: "Red Hat Text", sans-serif;
-  background: #eee;
-  /* background: linear-gradient(69deg, #57d8d060 0%, #4c791962 51%, #aa1e1164 87%); */
+  /* /* background: #eee; */
+  background: linear-gradient(
+    69deg,
+    #57d8d060 0%,
+    #4c791962 51%,
+    #aa1e1164 87%
+  );
+
+  background-image: radial-gradient(
+      rgba(169, 169, 169, 0.69) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(169, 169, 169, 0.69) 1px, transparent 1px);
+  background-size: 11px 11px;
+  background-position: 0 0, 5px 5px;
+  background-color: rgba(210, 182, 45, 0.69);
+  background-attachment: fixed;
+
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    90% 33%,
+    90% 66%,
+    100% 100%,
+    0% 100%,
+    10% 66%,
+    10% 33%
+  );
 }
 
 .container {
@@ -39,7 +66,7 @@ body {
 .second {
   background-image: url(images/bg2.webp);
   background-attachment: fixed;
-  height: 1200px;
+  height: 900px;
   flex-direction: row;
   align-items: center;
   gap: 1.169em;
@@ -65,6 +92,7 @@ h3 {
   -webkit-box-shadow: 0px 29px 38px -15px rgba(0, 0, 0, 0.43);
   -moz-box-shadow: 0px 29px 38px -15px rgba(0, 0, 0, 0.43);
   box-shadow: 0px 29px 38px -15px rgba(0, 0, 0, 0.43);
+  z-index: 69;
 }
 
 .img {
@@ -78,20 +106,21 @@ h3 {
 }
 
 .img-first {
-  background-image: url(https://source.unsplash.com/b0CEpd0m1QY);
+  background-image: url(images/post1.webp);
 }
 
 .img-second {
-  background-image: url(https://source.unsplash.com/EHKX_9m2b7w);
+  background-image: url(images/post3.webp);
 }
 
 .img-third {
-  background-image: url(https://source.unsplash.com/pN684G33h_M);
+  background-image: url(images/post2.webp);
 }
 
 h1 {
   font-weight: 700;
   font-size: 3rem;
+  color: #eeffdd;
 }
 .wit {
   color: #eee;
@@ -121,4 +150,8 @@ a:hover {
   background: var(--button);
   color: rgb(26, 79, 97);
   border-radius: 0.8em;
+}
+
+a.rechts {
+  float: right;
 }

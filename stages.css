@@ -4,6 +4,14 @@ body, html {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#back {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+
 #scrollbar {
   position: fixed;
   left: 0; /* Adjust as needed */
