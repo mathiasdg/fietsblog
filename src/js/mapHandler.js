@@ -178,7 +178,7 @@ class MapHandler {
       icon: fietsjeIcon,
     }).addTo(this.map);
 
-    // fietsMarker.setOpacity(0.3);
+    fietsMarker.setOpacity(0.69);
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
@@ -189,10 +189,10 @@ class MapHandler {
     );
     const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
-      this.map.removeLayer(fietsMarker);
+      // this.map.removeLayer(fietsMarker);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
       // this.map.fitBounds(totaleRoute.getBounds(), { padding: [69, 69] });
-      this.map.setView(eindPunt, 9);
+      // this.map.setView(eindPunt, 9);
     }, animationDuration);
     setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
@@ -224,8 +224,8 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 7.69);
 
-      i += 69;
-    }, 3);
+      i += 5;
+    }, 5);
   }
 
   animateCampingLocations() {
@@ -246,7 +246,7 @@ class MapHandler {
       // .bindTooltip(tooltipText);
 
       i++;
-    }, 111);
+    }, 690);
   }
 }
 

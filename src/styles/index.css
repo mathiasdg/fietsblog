@@ -195,7 +195,7 @@ body {
   background-color: transparent;
 }
 
-#vuurwerkers {
+/* #vuurwerkers {
   position: fixed;
   z-index: 70;
   bottom: -33px;
@@ -205,5 +205,5 @@ body {
   border-radius: 11% 11% 0% 0%;
   background-color: rgba(17, 105, 68, 0.22);
   /* background-color: #11223311; */
-  background-image: url(/images/vuurwerk.gif);
-}
+/* background-image: url(/images/vuurwerk.gif); */
+/* } */
