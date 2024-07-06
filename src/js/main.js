@@ -23,9 +23,9 @@ function animateLogos() {
     Math.random() > 0.5 ? "animate__rubberBand" : "animate__swing";
   logos.classList.add(rubberOfSwing, "animate__infinite", "animate__slower");
 
-  setTimeout(() => {
-    vuurwerk.classList.add("animate__zoomOutDown");
-  }, animationDuration + 6900);
+  // setTimeout(() => {
+  //   vuurwerk.classList.add("animate__zoomOutDown");
+  // }, animationDuration + 6900);
 }
 function stopAnimations() {
   logos.classList.remove("animate__animated");
