@@ -14,12 +14,13 @@ navigator.geolocation.getCurrentPosition(
     ];
     // console.log(deviceCoords);
     coordsInput.value = deviceCoords;
-    initMap();
+    console.log("jok");
   },
   (error) => {
     console.error(error);
   }
 );
+initMap();
 
 function initMap() {
   const mapz = L.map("map").setView(deviceCoords, 11);
@@ -49,8 +50,6 @@ function initMap() {
 // setTimeout(() => {
 //   initMap();
 // }, 3690);
-
-
 
 // fetch de overnachtingen uit de dynamische json file
 async function fetchData() {
