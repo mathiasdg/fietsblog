@@ -182,6 +182,11 @@ body {
   }
 }
 
+.fietser {
+  /* transform: scaleX(-1); */
+  transform-origin: center;
+}
+
 .marker {
   background-image: url(/images/tentie.svg);
   /* background-repeat: no-repeat; */

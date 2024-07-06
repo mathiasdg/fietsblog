@@ -28,7 +28,9 @@ const fietsjeIcon = L.icon({
   iconSize: [44, 44],
   iconAnchor: [22, 22],
   tooltipAnchor: [16, 0],
+  className: "fietser",
 });
+
 // const tentjeIcon = L.icon({
 //   iconUrl: "./images/tentie.svg",
 //   iconSize: [33, 33],
@@ -178,7 +180,26 @@ class MapHandler {
       icon: fietsjeIcon,
     }).addTo(this.map);
 
-    fietsMarker.setOpacity(0.69);
+    // Function to combine the transforms
+    function applyTransform() {
+      var element = document.querySelector(".fietser");
+      if (element) {
+        var currentTransform = window.getComputedStyle(element).transform;
+        var newTransform = "scaleX(-1)";
+
+        if (currentTransform !== "none") {
+          newTransform = currentTransform + " " + newTransform;
+        }
+
+        element.style.transform = newTransform;
+      }
+    }
+
+    // Gebruik een timeout om de transformatie toe te passen nadat het element is gerenderd
+    setTimeout(applyTransform, 100);
+
+    // Als de marker beweegt, opnieuw de transformatie toepassen
+    fietsMarker.on("move", applyTransform);
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
