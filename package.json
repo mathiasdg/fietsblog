@@ -15,6 +15,7 @@
     "animate.css": "^4.1.1",
     "leaflet-geometryutil": "^0.10.3",
     "leaflet-transitionedicon": "^0.2.1",
+    "leaflet.motion": "^0.3.2",
     "light-modal": "^1.2.1",
     "progressbar.js": "^1.1.1"
   }
