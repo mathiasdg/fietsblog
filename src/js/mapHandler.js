@@ -245,8 +245,8 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 7.69);
 
-      i += 5;
-    }, 5);
+      i += 12;
+    }, 6);
   }
 
   animateCampingLocations() {
@@ -267,7 +267,7 @@ class MapHandler {
       // .bindTooltip(tooltipText);
 
       i++;
-    }, 690);
+    }, 369);
   }
 }
 
