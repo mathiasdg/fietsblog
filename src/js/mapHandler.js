@@ -16,11 +16,11 @@ async function fetchOvernachtingenData() {
 }
 
 const tilesURL =
-  "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
-// "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
-// "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
-// "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}{r}.jpg";
-// "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  // "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
+  // "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
+  // "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
+  // "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}{r}.jpg";
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 // Icons
 const fietsjeIcon = L.icon({
@@ -31,13 +31,6 @@ const fietsjeIcon = L.icon({
   className: "fietser",
 });
 
-// const tentjeIcon = L.icon({
-//   iconUrl: "./images/tentie.svg",
-//   iconSize: [33, 33],
-//   iconAnchor: [16, 16],
-//   tooltipAnchor: [16, 0],
-//   className: "tentie",
-// });
 const tentjeIcon = L.divIcon({
   iconSize: [44, 44],
   iconAnchor: [22, 22],
@@ -49,27 +42,29 @@ const finishIcon = L.icon({
   iconSize: [33, 33],
   iconAnchor: [15, 30],
 });
-// const fireworksIcon = L.icon({
-//   iconUrl: "./images/vuurwerk.gif",
-//   iconSize: [33, 33],
-//   iconAnchor: [15, 30],
-//   tooltipAnchor: [16, 0],
-// });
 
 class MapHandler {
   constructor() {
-    // this.telAfstand;
-    // this.telEtappeAfstand;
+    this.telAfstand;
+    this.telEtappeAfstand;
     this.map = this.initializeMap();
-    // this.processData();
+    // console.log(map);
+    this.processData();
   }
 
   initializeMap() {
+    console.log(
+      "Map element aanwezig in de DOM?",
+      document.getElementById("map")
+    );
     const map = L.map("map");
+
+    console.log("Voegt tile layer toe aan de map...");
     L.tileLayer(tilesURL, {
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
+
     return map;
   }
 
@@ -281,7 +276,7 @@ class MapHandler {
   }
 
   animateCampingLocations(afgelegdeRoute) {
-    this.calcEtappeDistance(afgelegdeRoute);
+    // this.calculateEtappeDistance(afgelegdeRoute);
     let i = 0;
 
     const timer = setInterval(() => {
@@ -302,12 +297,18 @@ class MapHandler {
     }, 369);
   }
 
-  calcEtappeDistance() {
-    let test = L.GeometryUtil.closest(this.map, this.afgelegdeRoute);
+  /**
+   * Calculates the closest point on the map to the current route.
+   *
+   * @returns {L.LatLng} The closest point on the map to the current route.
+   */
+  calculateClosestPoint() {
+    return L.GeometryUtil.closest(this.map, this.afgelegdeRoute);
+    // let test = L.GeometryUtil.closest(this.map, this.afgelegdeRoute);
 
-    console.log(this.afgelegdeRoute);
-    console.log("boo " + test);
-    return true;
+    // console.log(this.afgelegdeRoute);
+    // console.log("boo " + test);
+    // return true;
   }
 }
 

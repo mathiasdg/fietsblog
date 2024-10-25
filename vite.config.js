@@ -1,22 +1,23 @@
 // vite.config.js
-// import basicSsl from "@vitejs/plugin-basic-ssl";
 import { defineConfig } from "vite";
+import fs from "fs";
+import path from "path";
 
 export default defineConfig({
   build: {
     target: "esnext",
   },
   server: {
-    open: true,
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, "localhost-key.pem")),
+      cert: fs.readFileSync(path.resolve(__dirname, "localhost-cert.pem")),
+    },
+    // https: {
+    //   key: "./localhost-key.pem",
+    //   cert: "./localhost-cert.pem",
+    // },
+    // host: "localhost", // Ensure it’s accessible on localhost
+    // port: 5173,
+    // open: true,
   },
-  // plugins: [
-  //   basicSsl({
-  //     /** name of certification */
-  //     name: "test",
-  //     /** custom trust domains */
-  //     domains: ["*.custom.com"],
-  //     /** custom certification directory */
-  //     certDir: "/Users/.../.devServer/cert",
-  //   }),
-  // ],
 });
