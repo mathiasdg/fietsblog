@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "animate.css": "^4.1.1",
+    "leaflet": "^1.9.4",
     "leaflet-geometryutil": "^0.10.3",
     "leaflet-transitionedicon": "^0.2.1",
     "leaflet.motion": "^0.3.2",

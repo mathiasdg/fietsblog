@@ -1,6 +1,7 @@
 import "animate.css";
 import "../styles/index.css";
 import "leaflet-geometryutil";
+import L from "leaflet";
 import ProgressBar from "progressbar.js";
 import MapHandler from "./mapHandler";
 

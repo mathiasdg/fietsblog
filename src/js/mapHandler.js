@@ -45,21 +45,16 @@ const finishIcon = L.icon({
 
 class MapHandler {
   constructor() {
-    this.telAfstand;
-    this.telEtappeAfstand;
+    // this.telAfstand;
+    // this.telEtappeAfstand;
     this.map = this.initializeMap();
-    // console.log(map);
     this.processData();
   }
 
   initializeMap() {
-    console.log(
-      "Map element aanwezig in de DOM?",
-      document.getElementById("map")
-    );
     const map = L.map("map");
 
-    console.log("Voegt tile layer toe aan de map...");
+    // console.log("Voegt tile layer toe aan de map...");
     L.tileLayer(tilesURL, {
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
