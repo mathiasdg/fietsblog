@@ -58,14 +58,10 @@ const finishIcon = L.icon({
 
 class MapHandler {
   constructor() {
-    this.telAfstand;
-    this.telEtappeAfstand;
+    // this.telAfstand;
+    // this.telEtappeAfstand;
     this.map = this.initializeMap();
     // this.processData();
-    setTimeout(
-      this.animateCampingLocations.bind(this),
-      animationDuration - 2000
-    );
   }
 
   initializeMap() {
@@ -124,6 +120,8 @@ class MapHandler {
         minDist = dist;
         dichtstePunt = coordinate;
       }
+
+      // console.log(dichtstePunt);
       // console.log(dist);
 
       latLngsTotaleRoute.push(coordinate);
@@ -156,6 +154,32 @@ class MapHandler {
     L.marker(eindPunt, {
       icon: finishIcon,
     }).addTo(this.map);
+
+    // L.motion
+    //   .polyline(
+    //     [
+    //       [53, 6],
+    //       [54, 7],
+    //       [52, 8],
+    //     ],
+    //     {
+    //       color: "transparent",
+    //     },
+    //     {
+    //       auto: true,
+    //       duration: 3000,
+    //       easing: L.Motion.Ease.easeInOutQuart,
+    //     },
+    //     {
+    //       removeOnEnd: true,
+    //       showMarker: true,
+    //       icon: L.divIcon({
+    //         html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>",
+    //         iconSize: L.point(27.5, 24),
+    //       }),
+    //     }
+    //   )
+    //   .addTo(this.map);
 
     // L.polylineDecorator(totaleRoute, {
     //   patterns: [
@@ -208,6 +232,13 @@ class MapHandler {
       latLngsAfgelegdeRoute,
       fietsMarker
     );
+
+    setTimeout(
+      // this.animateCampingLocations.bind(this),
+      this.animateCampingLocations(afgelegdeRoute),
+      animationDuration - 2000
+    );
+
     const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
       // this.map.removeLayer(fietsMarker);
@@ -217,7 +248,7 @@ class MapHandler {
     }, animationDuration);
     setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
-    this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
+    // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
 
     return {
@@ -249,7 +280,8 @@ class MapHandler {
     }, 6);
   }
 
-  animateCampingLocations() {
+  animateCampingLocations(afgelegdeRoute) {
+    this.calcEtappeDistance(afgelegdeRoute);
     let i = 0;
 
     const timer = setInterval(() => {
@@ -268,6 +300,14 @@ class MapHandler {
 
       i++;
     }, 369);
+  }
+
+  calcEtappeDistance() {
+    let test = L.GeometryUtil.closest(this.map, this.afgelegdeRoute);
+
+    console.log(this.afgelegdeRoute);
+    console.log("boo " + test);
+    return true;
   }
 }
 
