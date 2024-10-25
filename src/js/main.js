@@ -9,7 +9,7 @@ const animationDuration = 4444;
 const extraInfo = document.getElementById("extra-info");
 const statsKnop = document.getElementById("statz");
 const statsModal = document.getElementById("statz-modal-body");
-const vuurwerk = document.getElementById("vuurwerkers");
+// const vuurwerk = document.getElementById("vuurwerkers");
 const logos = document.querySelector(".logo");
 
 // load the stats from the external file
@@ -34,13 +34,12 @@ function stopAnimations() {
 // Initialize the MapHandler
 const maphandy = new MapHandler();
 const routeData = await maphandy.processData();
-// maphandy.processData(); // tweede achtervolger => Eefke
 
 const totaalKilometers = Number(routeData.lengteTotaleRoute / 1000).toFixed(0);
 let afgelegdeKilometers = Number(
   (routeData.lengteAfgelegdeRoute / 1000).toFixed(0)
 );
-afgelegdeKilometers = afgelegdeKilometers; // +20km voor Lier-Mechelen
+afgelegdeKilometers = afgelegdeKilometers;
 const afgelegdPercentage = (afgelegdeKilometers / totaalKilometers).toFixed(2);
 
 // Initialize ProgressBar
