@@ -11,6 +11,9 @@ importers:
       animate.css:
         specifier: ^4.1.1
         version: 4.1.1
+      leaflet:
+        specifier: ^1.9.4
+        version: 1.9.4
       leaflet-geometryutil:
         specifier: ^0.10.3
         version: 0.10.3
