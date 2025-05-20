@@ -17,6 +17,9 @@ importers:
       leaflet-geometryutil:
         specifier: ^0.10.3
         version: 0.10.3
+      leaflet-imageoverlay-rotated:
+        specifier: ^0.2.1
+        version: 0.2.1
       leaflet-transitionedicon:
         specifier: ^0.2.1
         version: 0.2.1
@@ -273,6 +276,9 @@ packages:
   leaflet-geometryutil@0.10.3:
     resolution: {integrity: sha512-Qeas+KsnenE0Km/ydt8km3AqFe7kJhVwuLdbCYM2xe2epsxv5UFEaVJiagvP9fnxS8QvBNbm7DJlDA0tkKo9VA==}
 
+  leaflet-imageoverlay-rotated@0.2.1:
+    resolution: {integrity: sha512-8MsrIuW/aXI0EjDXgJSJJ67nqVNQJsP/glmND9g6yc6t+zQgdPUbTRHC65jSs/IBwzwyhggnDgDuydalcEX+ew==}
+
   leaflet-transitionedicon@0.2.1:
     resolution: {integrity: sha512-gtXj7d2Yl2WqLfG96hZFnPnD93s/pNeoSDPJ4B0B1/L/YLB1xWgPcmPN6UZ+qiBLzZcl3R3xs9J7sq7/15GgwQ==}
 
@@ -499,6 +505,10 @@ snapshots:
     optional: true
 
   leaflet-geometryutil@0.10.3:
+    dependencies:
+      leaflet: 1.9.4
+
+  leaflet-imageoverlay-rotated@0.2.1:
     dependencies:
       leaflet: 1.9.4
 
