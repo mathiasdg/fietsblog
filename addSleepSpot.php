@@ -6,21 +6,31 @@ header("Access-Control-Allow-Methods: POST");  // Allow POST requests
 header("Access-Control-Allow-Headers: Content-Type");  // Allow Content-Type header
 header('Content-Type: application/json');
 
-// Read the incoming JSON data
-$json_data = file_get_contents('php://input');
+$jsonFile = 'trips.json';
+$tripId = $_POST['tripId'] ?? 'donau-2025'; // Default to new trip if not specified
 
-// Dynamically determine the path to the JSON file in the public directory
-$jsonFilePath = './public/overnachtingen.json';
+// Read existing data
+$data = json_decode(file_get_contents($jsonFile), true);
 
-if (file_put_contents($jsonFilePath, $json_data) === false) {
-  echo json_encode(array('error' => 'Could not save data to file'. $jsonFilePath ) );
-  if (!is_writable($jsonFilePath)) {
-    echo json_encode(array('error' => 'File is not writable'. $jsonFilePath ) );
-  } elseif (!file_exists($jsonFilePath)) {
-    echo json_encode(array('error' => 'File does not exist'. $jsonFilePath ) );
-  } else {
-    echo json_encode(array('error' => 'onbekende erreuuuuur' ) );
-  }
+// Get new coordinates from POST data
+$newCoords = json_decode($_POST['coords'], true);
+
+// Add new coordinates to the specified trip
+if (isset($data['trips'][$tripId])) {
+    $data['trips'][$tripId]['overnight_locations'][] = $newCoords;
+    
+    // Save back to file
+    file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Location added successfully',
+        'trip' => $data['trips'][$tripId]
+    ]);
 } else {
-  echo $json_data;
+    http_response_code(404);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Trip not found'
+    ]);
 }
