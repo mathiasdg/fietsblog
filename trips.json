@@ -1,0 +1,20 @@
+{
+  "trips": {
+    "belgium-to-mazuria-2023": {
+      "name": "Belgium to Mazuria 2023",
+      "description": "From Belgium to Mazuria for a wedding",
+      "overnight_locations": [
+        [51.24117, 5.92827],
+        [51.5535, 6.5118],
+        [51.7021, 7.1666],
+        [51.6923, 7.4017],
+        [50.767, 4.4737]
+      ]
+    },
+    "new-trip-2024": {
+      "name": "New Trip 2024",
+      "description": "Your new cycling adventure",
+      "overnight_locations": []
+    }
+  }
+} 

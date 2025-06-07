@@ -10,9 +10,9 @@ const overnachtingen = await fetchOvernachtingenData();
 
 // fetch de overnachtingen uit de dynamiosche json file
 async function fetchOvernachtingenData() {
-  const response = await fetch("/overnachtingen.json");
+  const response = await fetch("/trips.json");
   const data = await response.json();
-  return data.slaapCoordinaten;
+  return data.trips["donau-2025"].overnight_locations;
 }
 
 const tilesURL =
@@ -64,12 +64,18 @@ class MapHandler {
   }
 
   async fetchAndParseGpx() {
-    const response = await fetch("/data/data.gpx");
+    const response = await fetch("/data/donau.gpx");
     const text = await response.text();
     const parser = new DOMParser();
     const data = parser.parseFromString(text, "text/xml");
-
-    return data.getElementsByTagName("trkpt");
+    const items = data.getElementsByTagName("trkpt");
+    
+    if (!items || items.length === 0) {
+      console.error("No track points found in GPX file");
+      return [];
+    }
+    
+    return items;
   }
 
   async processData() {
