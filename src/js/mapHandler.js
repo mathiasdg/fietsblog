@@ -12,7 +12,10 @@ const overnachtingen = await fetchOvernachtingenData();
 async function fetchOvernachtingenData() {
   const response = await fetch("/trips.json");
   const data = await response.json();
-  return data.trips["donau-2025"].overnight_locations;
+  return {
+    overnight_locations: data.trips["donau-2025"].overnight_locations,
+    gpx_file: data.trips["donau-2025"].gpx_file
+  };
 }
 
 const tilesURL =
@@ -64,7 +67,8 @@ class MapHandler {
   }
 
   async fetchAndParseGpx() {
-    const response = await fetch("/data/donau.gpx");
+    const tripData = await fetchOvernachtingenData();
+    const response = await fetch(tripData.gpx_file);
     const text = await response.text();
     const parser = new DOMParser();
     const data = parser.parseFromString(text, "text/xml");
