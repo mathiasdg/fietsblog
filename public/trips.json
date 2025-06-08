@@ -3,7 +3,7 @@
     "belgium-to-mazuria-2023": {
       "name": "België tot Mazurië 2024",
       "description": "Van België tot Mazurië voor een de trouw van Danny en Joanna",
-      "gpx_file": "data/belgium-to-mazuria-2023/route.gpx",
+      "gpx_file": "geodata/belgium-to-mazuria-2023/route.gpx",
       "overnight_locations": [
         [51.24117, 5.92827],
         [51.5535, 6.5118],
@@ -20,7 +20,7 @@
     "donau-2025": {
       "name": "Donau 2025",
       "description": "Fietstrip van bron tot monding naast de Donau",
-      "gpx_file": "data/donau-2025/route.gpx",
+      "gpx_file": "geodata/donau-2025/route.gpx",
       "overnight_locations": []
     }
   }
