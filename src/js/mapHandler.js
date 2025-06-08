@@ -19,11 +19,11 @@ async function fetchOvernachtingenData() {
 }
 
 const tilesURL =
-  // "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
+  "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
   // "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
   // "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
   // "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}{r}.jpg";
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  //"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 // Icons
 const fietsjeIcon = L.icon({
@@ -68,7 +68,9 @@ class MapHandler {
 
   async fetchAndParseGpx() {
     const tripData = await fetchOvernachtingenData();
-    const response = await fetch(tripData.gpx_file);
+    // Remove leading slash for dev mode
+    const gpxPath = tripData.gpx_file.startsWith('/') ? tripData.gpx_file.slice(1) : tripData.gpx_file;
+    const response = await fetch(gpxPath);
     const text = await response.text();
     const parser = new DOMParser();
     const data = parser.parseFromString(text, "text/xml");
