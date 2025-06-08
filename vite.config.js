@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 export default defineConfig({
-  // baseDir: "./",
+  base: './', // This ensures assets are loaded with relative paths
   build: {
     target: "esnext",
     assetsDir: "assets",
@@ -12,6 +12,11 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
       },
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      }
     },
   },
   publicDir: "public",
