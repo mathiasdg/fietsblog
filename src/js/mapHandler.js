@@ -7,6 +7,7 @@ const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
 // const overnachtingen = slaapPlekken.slaapCoordinaten;
 const overnachtingen = await fetchOvernachtingenData();
 // console.log(overnachtingen);
+const trip = "donau-2025";
 
 // fetch de overnachtingen uit de dynamiosche json file
 async function fetchOvernachtingenData() {

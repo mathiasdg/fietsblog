@@ -1,6 +1,6 @@
 import "animate.css";
-import "../styles/index.css";
 import "leaflet-geometryutil";
+import "../styles/index.css";
 import L from "leaflet";
 import ProgressBar from "progressbar.js";
 import MapHandler from "./mapHandler";
@@ -10,7 +10,6 @@ const animationDuration = 4444;
 const extraInfo = document.getElementById("extra-info");
 const statsKnop = document.getElementById("statz");
 const statsModal = document.getElementById("statz-modal-body");
-// const vuurwerk = document.getElementById("vuurwerkers");
 const logos = document.querySelector(".logo");
 
 // load the stats from the external file
