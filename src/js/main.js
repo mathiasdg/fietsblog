@@ -9,7 +9,6 @@ const animationDuration = 4444;
 const extraInfo = document.getElementById("extra-info");
 const statsKnop = document.getElementById("statz");
 const statsModal = document.getElementById("statz-modal-body");
-const vuurwerk = document.getElementById("vuurwerkers");
 const logos = document.querySelector(".logo");
 
 // load the stats from the external file
@@ -19,13 +18,9 @@ statsKnop.addEventListener("click", stopAnimations);
 setTimeout(animateLogos, animationDuration + 3690);
 
 function animateLogos() {
-  const rubberOfSwing =
+  const rubberOrSwing =
     Math.random() > 0.5 ? "animate__rubberBand" : "animate__swing";
-  logos.classList.add(rubberOfSwing, "animate__infinite", "animate__slower");
-
-  // setTimeout(() => {
-  //   vuurwerk.classList.add("animate__zoomOutDown");
-  // }, animationDuration + 6900);
+  logos.classList.add(rubberOrSwing, "animate__infinite", "animate__slower");
 }
 function stopAnimations() {
   logos.classList.remove("animate__animated");
@@ -34,14 +29,16 @@ function stopAnimations() {
 // Initialize the MapHandler
 const maphandy = new MapHandler();
 const routeData = await maphandy.processData();
+// console.log(routeData)
 // maphandy.processData(); // tweede achtervolger => Eefke
 
 const totaalKilometers = Number(routeData.lengteTotaleRoute / 1000).toFixed(0);
 let afgelegdeKilometers = Number(
   (routeData.lengteAfgelegdeRoute / 1000).toFixed(0)
 );
-afgelegdeKilometers = afgelegdeKilometers; // +20km voor Lier-Mechelen
+console.log(afgelegdeKilometers)
 const afgelegdPercentage = (afgelegdeKilometers / totaalKilometers).toFixed(2);
+console.log(afgelegdPercentage)
 
 // Initialize ProgressBar
 const bar = new ProgressBar.Line("#bar", {

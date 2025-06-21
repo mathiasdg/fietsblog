@@ -33,7 +33,8 @@ function initializeMap() {
 function addCampingLocation(map, slaapplek, icon) {
     L.marker(slaapplek, { icon })
         .addTo(map)
-        .bindTooltip("lat: " + slaapplek[0] + "<br> lon: " + slaapplek[1]);
+        .bindTooltip("lat: " + slaapplek[0] + "<br> lon: " + slaapplek[1])
+        .getElement().classList.add('mirrored-icon');
 }
 
 function fetchAndDrawRoute(map, slaapplek, icon, extraInfo) {
@@ -334,7 +335,3 @@ function deg2rad(deg) {
 //     drawTrack(gpx.tracks[0]);
 //     document.getElementById("lastUpdate").innerText = gpx.tracks[0].points.at(-1).time.toLocaleString();
 // });
-
-
-
-

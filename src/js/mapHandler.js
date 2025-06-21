@@ -1,14 +1,14 @@
 import { getDistanceFromLatLonInKm, getEuclideanDistance } from "./utils";
 
 // Constants and Globals
-const animationDuration = 5555;
+const animationDuration = 6900;
 const dag = new Date().getDay();
 const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
-// const overnachtingen = slaapPlekken.slaapCoordinaten;
 const overnachtingen = await fetchOvernachtingenData();
-// console.log(overnachtingen);
+const etappes = []
 
-// fetch de overnachtingen uit de dynamiosche json file
+
+// fetch de overnachtingen uit de dynamische json file
 async function fetchOvernachtingenData() {
   const response = await fetch("/overnachtingen.json");
   const data = await response.json();
@@ -49,12 +49,6 @@ const finishIcon = L.icon({
   iconSize: [33, 33],
   iconAnchor: [15, 30],
 });
-// const fireworksIcon = L.icon({
-//   iconUrl: "./images/vuurwerk.gif",
-//   iconSize: [33, 33],
-//   iconAnchor: [15, 30],
-//   tooltipAnchor: [16, 0],
-// });
 
 class MapHandler {
   constructor() {
@@ -196,10 +190,10 @@ class MapHandler {
     }
 
     // Gebruik een timeout om de transformatie toe te passen nadat het element is gerenderd
-    setTimeout(applyTransform, 100);
+    // setTimeout(applyTransform, 100);
 
     // Als de marker beweegt, opnieuw de transformatie toepassen
-    fietsMarker.on("move", applyTransform);
+    // fietsMarker.on("move", applyTransform);
 
     const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
@@ -236,35 +230,40 @@ class MapHandler {
    */
   animateRoute(route, routeCoordinates, marker, animationTime = 3690) {
     let i = 0;
-    const timer = setInterval(() => {
+    const timer = setInterval(_ => {
       if (i >= routeCoordinates.length) {
         clearInterval(timer);
         return;
       }
       route.addLatLng(routeCoordinates[i]);
       marker.setLatLng(routeCoordinates[i]);
-      // this.map.setView(routeCoordinates[i], 7.69);
+      // this.map.setView(routeCoordinates[i], 8.69);
 
-      i += 12;
-    }, 6);
+      i += 22;
+    }, 11);
   }
+
 
   animateCampingLocations() {
     let i = 0;
 
-    const timer = setInterval(() => {
+    const timer = setInterval(_ => {
       if (i >= overnachtingen.length - 1) {
         clearInterval(timer);
         return;
       }
+      
+      // const etappeLengte = L.GeometryUtil.length(totaleRoute);
+
+
       const campingCoordinates = overnachtingen[i];
       const tooltipText = `etappe ${i + 1}
-      <br>afstand : ${null}<br> totaal bestierde afstand: ${null}
-      <br>${campingCoordinates}`;
+      <br>afstand : ${null}<br> totaal bestierde afstand: ${null}`;
+      // <br>${campingCoordinates}`;
 
-      L.marker(campingCoordinates, { icon: tentjeIcon }).addTo(this.map);
-
-      // .bindTooltip(tooltipText);
+      L.marker(campingCoordinates, { icon: tentjeIcon })
+        .addTo(this.map);
+        // .bindTooltip(tooltipText);
 
       i++;
     }, 369);
