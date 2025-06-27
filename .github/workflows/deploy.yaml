@@ -1,0 +1,34 @@
+name: Build & Deploy Static Site (Bun + FTP)
+
+on:
+  push:
+    branches:
+      - main  # verander dit als je een andere branch gebruikt
+      - vercel-werkend
+
+jobs:
+  deploy:
+    name: 🔨 Build & 🚀 FTP Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🍞 Install Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: 📦 Install dependencies with Bun
+        run: bun install
+
+      - name: 🏗️ Build project with Vite
+        run: bun run build
+
+      - name: 🚀 Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/
+          server-dir: domains/bladsteenschaar.be/public_html/fietsen/
