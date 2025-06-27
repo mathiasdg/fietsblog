@@ -3,6 +3,7 @@ name: OHLALAAAA => Build & Deploy Static Site (Bun + FTP)
 on:
   push:
     branches:
+      - main
       - vercel-werkend
 
 jobs:

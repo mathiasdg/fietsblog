@@ -239,7 +239,7 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 8.69);
 
-      i += 22;
+      i += 33;
     }, 11);
   }
 
