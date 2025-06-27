@@ -1,14 +1,13 @@
-name: Build & Deploy Static Site (Bun + FTP)
+name: OHLALAAAA => Build & Deploy Static Site (Bun + FTP)
 
 on:
   push:
     branches:
-      - main  # verander dit als je een andere branch gebruikt
       - vercel-werkend
 
 jobs:
   deploy:
-    name: 🔨 Build & 🚀 FTP Deploy
+    name: 🔨 Build & 🚀 FTP Deploy zijbranch die werkt
     runs-on: ubuntu-latest
 
     steps:
