@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # verander dit als je een andere branch gebruikt
+      - vercel-werkend
 
 jobs:
   deploy:
