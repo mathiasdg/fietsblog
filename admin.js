@@ -14,13 +14,13 @@ navigator.geolocation.getCurrentPosition(
     ];
     // console.log(deviceCoords);
     coordsInput.value = deviceCoords;
-    console.log("jok");
+    // console.log("jok");
   },
   (error) => {
     console.error(error);
   }
 );
-initMap();
+// initMap();
 
 function initMap() {
   const mapz = L.map("map").setView(deviceCoords, 11);
@@ -62,7 +62,7 @@ async function updateData(newCoordys) {
   const data = await fetchData();
   data.slaapCoordinaten.push(newCoordys);
 
-  const response = await fetch("http://localhost/fietsblog/addSleepSpot.php", {
+  const response = await fetch("./addSleepSpot.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
