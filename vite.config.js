@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
-    basePath: "./",
+    // basePath: "./",
     target: "esnext",
   },
   server: {
