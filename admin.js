@@ -3,27 +3,27 @@ const coordsInput = document.querySelector("#coords");
 const feedbackDiv = document.querySelector("#feedback");
 const map = document.querySelector("#map");
 let deviceCoords = null;
+const defaultCoords = [47.69, 19.69]; // update tijdens de reis
 
 navigator.geolocation.getCurrentPosition(
   (position) => {
     deviceCoords = [
       position.coords.latitude,
       position.coords.longitude,
-      // position.coords.accuracy,
-      // position.timestamp,
     ];
-    // console.log(deviceCoords);
     coordsInput.value = deviceCoords;
-    // console.log("jok");
+    initMap(); // Initialize map with device coordinates
   },
   (error) => {
     console.error(error);
+    deviceCoords = defaultCoords; // Use fallback coordinates
+    initMap(); // Initialize map with default coordinates
   }
 );
-// initMap();
 
 function initMap() {
   const mapz = L.map("map").setView(deviceCoords, 11);
+  // rest of your map initialization code
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
