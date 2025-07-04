@@ -264,7 +264,7 @@ class MapHandler {
       const campingData = overnachtingen[i];
       const campingCoordinates = [campingData['lat'], campingData['lon']];
 
-      const tooltipText = `etappe ${i + 1} ${campingData.flag}`;
+      const tooltipText = `<h2>Etappe ${i + 1} ${campingData.flag}</h2>`;
       // <br> totaal bestierde afstand: ${campingData.kmTotHier}`;
       // <br>${campingCoordinates}`;
 
