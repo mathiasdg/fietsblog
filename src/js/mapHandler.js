@@ -12,6 +12,7 @@ const etappes = []
 async function fetchOvernachtingenData() {
   const response = await fetch("/overnachtingen.json");
   const data = await response.json();
+
   return data.slaapCoordinaten;
 }
 
@@ -27,7 +28,7 @@ const fietsjeIcon = L.icon({
   iconUrl: `/images/${ezyOrFiets}.svg`,
   iconSize: [44, 44],
   iconAnchor: [22, 22],
-  tooltipAnchor: [16, 0],
+  tooltipAnchor: [0, 0],
   className: "fietser",
 });
 
@@ -85,8 +86,10 @@ class MapHandler {
     const latLngsTotaleRoute = [];
     let laatsteSlaapplek;
 
+    console.log(overnachtingen[0]);
+
     if (overnachtingen.length > 0) {
-      laatsteSlaapplek = overnachtingen[overnachtingen.length - 1];
+      laatsteSlaapplek = [overnachtingen[overnachtingen.length - 1].lat, overnachtingen[overnachtingen.length - 1].lon];
     } else {
       laatsteSlaapplek = 0;
     }
@@ -210,6 +213,8 @@ class MapHandler {
       // this.map.setView(eindPunt, 9);
     }, animationDuration);
     setTimeout(() => clearInterval(intervalID), animationDuration + 169);
+    console.log(afgelegdeRoute);
+    console.log(afgelegdeRoute.getBounds());
 
     this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
@@ -256,14 +261,16 @@ class MapHandler {
       // const etappeLengte = L.GeometryUtil.length(totaleRoute);
 
 
-      const campingCoordinates = overnachtingen[i];
-      const tooltipText = `etappe ${i + 1}
-      <br>afstand : ${null}<br> totaal bestierde afstand: ${null}`;
+      const campingData = overnachtingen[i];
+      const campingCoordinates = [campingData['lat'], campingData['lon']];
+
+      const tooltipText = `etappe ${i + 1} ${campingData.flag}`;
+      // <br> totaal bestierde afstand: ${campingData.kmTotHier}`;
       // <br>${campingCoordinates}`;
 
       L.marker(campingCoordinates, { icon: tentjeIcon })
-        .addTo(this.map);
-        // .bindTooltip(tooltipText);
+        .addTo(this.map)
+        .bindTooltip(tooltipText);
 
       i++;
     }, 369);
