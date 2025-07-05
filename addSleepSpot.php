@@ -1,26 +1,75 @@
 <?php
 
-// Add CORS headers
-header('Access-Control-Allow-Origin: *');  // Allow requests from any origin
-header('Access-Control-Allow-Methods: POST');  // Allow POST requests
-header('Access-Control-Allow-Headers: Content-Type');  // Allow Content-Type header
+// CORS headers
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
-// Read the incoming JSON data
-$json_data = file_get_contents('php://input');
+// 🔄 Functie om vlag te halen
+function countryCodeToEmoji(string $code): string {
+    $code = strtoupper($code);
+    $offset = 0x1F1E6;
+    $emoji = '';
+    foreach (str_split($code) as $char) {
+        $emoji .= mb_chr($offset + ord($char) - ord('A'), 'UTF-8');
+    }
+    return $emoji;
+}
 
-// Dynamically determine the path to the JSON file in the public directory
+function getCountryData($lat, $lng) {
+    $url = "https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=json&zoom=3&addressdetails=1";
+    $opts = [
+        "http" => ["header" => "User-Agent: MathiflipAdminScript/69"]
+    ];
+    $context = stream_context_create($opts);
+    $json = file_get_contents($url, false, $context);
+    $data = json_decode($json, true);
+
+    if (!isset($data['address'])) return null;
+
+    return [
+        'country' => $data['address']['country'] ?? null,
+        'country_code' => $data['address']['country_code'] ?? null
+    ];
+}
+
+// 📥 Lees binnenkomende JSON
+$incoming = json_decode(file_get_contents('php://input'), true);
+$lat = round($incoming['lat'], 6);
+$lng = round($incoming['lng'], 6);
+$foto = $incoming['foto'] ?? null;
+
+// 🌍 Voeg land en vlag toe
+$geo = getCountryData($lat, $lng);
+$country = $geo['country'] ?? null;
+$flag = $geo['country_code'] ? countryCodeToEmoji($geo['country_code']) : null;
+
+// 📁 Pad naar json
 $jsonFilePath = 'overnachtingen.json';
 
-if (file_put_contents($jsonFilePath, $json_data) === false) {
-  echo json_encode(array('error' => 'Data niet opgeslagen in bestand :: ' . $jsonFilePath));
-  if (!is_writable($jsonFilePath)) {
-    echo json_encode(array('error' => 'Bestand niet schrijfbaar' . $jsonFilePath));
-  } elseif (!file_exists($jsonFilePath)) {
-    echo json_encode(array('error' => 'Bestand bestaat niet' . $jsonFilePath));
-  } else {
-    echo json_encode(array('error' => 'onbekende erreuuuuur'));
-  }
+// 📂 Bestaande data inladen
+if (file_exists($jsonFilePath)) {
+    $existing = json_decode(file_get_contents($jsonFilePath), true);
 } else {
-  echo $json_data;
+    $existing = ['overnachtingen' => []];
+}
+
+// 🏕️ Voeg toe
+$existing['overnachtingen'][] = [
+    'lat' => $lat,
+    'lng' => $lng,
+    'country' => $country,
+    'flag' => $flag,
+    "kmTotHier" => null,
+    "blogTitle" => null,
+    "tentPhoto" => null,
+    "icon" => "tent"
+];
+
+// 💾 Opslaan
+if (file_put_contents($jsonFilePath, json_encode($existing, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    echo json_encode(['success' => true, 'added' => end($existing['overnachtingen'])]);
+} else {
+    echo json_encode(['error' => 'Kon JSON bestand niet wegschrijven']);
 }

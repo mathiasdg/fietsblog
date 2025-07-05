@@ -86,8 +86,6 @@ class MapHandler {
     const latLngsTotaleRoute = [];
     let laatsteSlaapplek;
 
-    console.log(overnachtingen[0]);
-
     if (overnachtingen.length > 0) {
       laatsteSlaapplek = [overnachtingen[overnachtingen.length - 1].lat, overnachtingen[overnachtingen.length - 1].lon];
     } else {
@@ -126,6 +124,10 @@ class MapHandler {
       latLngsTotaleRoute.push(coordinate);
       vorigePunt = coordinate;
     }
+
+    // Calculate segment lengths between overnight locations
+    const segmentLengths = this.calculateSegmentLengths(latLngsTotaleRoute, overnachtingen);
+    console.log('Segment lengths:', segmentLengths);  
 
     const totaleRoute = L.polyline(latLngsTotaleRoute, {
       color: "#ff6944",
@@ -213,8 +215,6 @@ class MapHandler {
       // this.map.setView(eindPunt, 9);
     }, animationDuration);
     setTimeout(() => clearInterval(intervalID), animationDuration + 169);
-    console.log(afgelegdeRoute);
-    console.log(afgelegdeRoute.getBounds());
 
     this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
     // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
@@ -244,10 +244,67 @@ class MapHandler {
       marker.setLatLng(routeCoordinates[i]);
       // this.map.setView(routeCoordinates[i], 8.69);
 
-      i += 33;
+      i += 44;
     }, 11);
   }
 
+
+  /**
+   * Calculate the length of each segment between overnight locations
+   * @param {Array} routeCoordinates - Array of [lat, lon] coordinates for the entire route
+   * @param {Array} overnightLocations - Array of overnight location objects with lat/lon properties
+   * @returns {Array} Array of segment lengths in meters
+   */
+  calculateSegmentLengths(routeCoordinates, overnightLocations) {
+    const segmentLengths = [];
+    
+    for (let i = 0; i < overnightLocations.length - 1; i++) {
+      const currentLocation = [overnightLocations[i].lat, overnightLocations[i].lon];
+      const nextLocation = [overnightLocations[i + 1].lat, overnightLocations[i + 1].lon];
+      
+      // Find the closest route points to these overnight locations
+      const currentIndex = this.findClosestRoutePoint(routeCoordinates, currentLocation);
+      const nextIndex = this.findClosestRoutePoint(routeCoordinates, nextLocation);
+      
+      // Extract the segment coordinates
+      const segmentCoordinates = routeCoordinates.slice(currentIndex, nextIndex + 1);
+      
+      // Create a polyline for this segment and calculate its length
+      const segmentPolyline = L.polyline(segmentCoordinates);
+      const segmentLength = L.GeometryUtil.length(segmentPolyline);
+      
+      segmentLengths.push({
+        segment: i + 1,
+        from: overnightLocations[i].flag || `Location ${i + 1}`,
+        to: overnightLocations[i + 1].flag || `Location ${i + 2}`,
+        length: segmentLength,
+        lengthKm: (segmentLength / 1000).toFixed(2)
+      });
+    }
+    
+    return segmentLengths;
+  }
+
+  /**
+   * Find the index of the route coordinate closest to a given location
+   * @param {Array} routeCoordinates - Array of [lat, lon] coordinates
+   * @param {Array} targetLocation - [lat, lon] of target location
+   * @returns {number} Index of closest route coordinate
+   */
+  findClosestRoutePoint(routeCoordinates, targetLocation) {
+    let minDistance = Infinity;
+    let closestIndex = 0;
+    
+    for (let i = 0; i < routeCoordinates.length; i++) {
+      const distance = getEuclideanDistance(routeCoordinates[i], targetLocation);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+    
+    return closestIndex;
+  }
 
   animateCampingLocations() {
     let i = 0;
@@ -259,6 +316,7 @@ class MapHandler {
       }
       
       // const etappeLengte = L.GeometryUtil.length(totaleRoute);
+      // console.log(etappeLengte);
 
 
       const campingData = overnachtingen[i];

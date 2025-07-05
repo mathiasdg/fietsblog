@@ -90,7 +90,7 @@ button.addEventListener("click", (event) => {
 
   const coords = coordsInput.value
     .split(",")
-    .map((coord) => parseFloat(coord.trim()));
+    .map((coord) => parseFloat(coord.trim().toFixed(6)));
 
   if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
     // Use coordinates from the input field if available
