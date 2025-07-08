@@ -4,7 +4,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: application/json');
+header('Content-Type: application/json');   
 
 // 🔄 Functie om vlag te halen
 function countryCodeToEmoji(string $code): string {
@@ -36,8 +36,9 @@ function getCountryData($lat, $lng) {
 
 // 📥 Lees binnenkomende JSON
 $incoming = json_decode(file_get_contents('php://input'), true);
-$lat = round($incoming['lat'], 6);
-$lng = round($incoming['lng'], 6);
+
+$lat = (float) round($incoming['lat'], 6);
+$lng = (float) round($incoming['lon'], 6);
 $foto = $incoming['foto'] ?? null;
 
 // 🌍 Voeg land en vlag toe
@@ -46,19 +47,19 @@ $country = $geo['country'] ?? null;
 $flag = $geo['country_code'] ? countryCodeToEmoji($geo['country_code']) : null;
 
 // 📁 Pad naar json
-$jsonFilePath = 'overnachtingen.json';
+$jsonFilePath = '../public/overnachtingen.json';
 
 // 📂 Bestaande data inladen
 if (file_exists($jsonFilePath)) {
     $existing = json_decode(file_get_contents($jsonFilePath), true);
 } else {
-    $existing = ['overnachtingen' => []];
+    $existing = ['slaapCoordinaten' => []];
 }
 
 // 🏕️ Voeg toe
-$existing['overnachtingen'][] = [
+$existing['slaapCoordinaten'][] = [
     'lat' => $lat,
-    'lng' => $lng,
+    'lon' => $lng,
     'country' => $country,
     'flag' => $flag,
     "kmTotHier" => null,
@@ -68,8 +69,8 @@ $existing['overnachtingen'][] = [
 ];
 
 // 💾 Opslaan
-if (file_put_contents($jsonFilePath, json_encode($existing, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-    echo json_encode(['success' => true, 'added' => end($existing['overnachtingen'])]);
+if (file_put_contents($jsonFilePath, json_encode($existing, JSON_UNESCAPED_UNICODE))) {
+    echo json_encode(['success' => true, 'count' => count($existing['slaapCoordinaten']), 'added' => end($existing['slaapCoordinaten'])]);
 } else {
     echo json_encode(['error' => 'Kon JSON bestand niet wegschrijven']);
 }

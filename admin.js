@@ -3,7 +3,15 @@ const coordsInput = document.querySelector("#coords");
 const feedbackDiv = document.querySelector("#feedback");
 const map = document.querySelector("#map");
 let deviceCoords = null;
-const defaultCoords = [47.69, 19.69]; // update tijdens de reis
+const defaultCoords = [46.69, 21.69]; // update tijdens de reis
+const mode = import.meta.env.VITE_MODE;
+let apiUrl = "";
+
+if (mode === "dev") {
+  apiUrl = "http://localhost/fietsblog/api/addSleepSpot.php";
+} else {
+  apiUrl = "./api/addSleepSpot.php";
+}
 
 navigator.geolocation.getCurrentPosition(
   (position) => {
@@ -39,7 +47,6 @@ function initMap() {
     } else {
       marker = L.marker([lat, lng]).addTo(mapz);
     }
-    // console.log(`Clicked at ${lat}, ${lng}`);
     mapz.setView([lat, lng], mapz.getZoom());
     coordsInput.value = [lat, lng].toString();
   });
@@ -51,33 +58,31 @@ function initMap() {
 //   initMap();
 // }, 3690);
 
-// fetch de overnachtingen uit de dynamische json file
-async function fetchData() {
-  const response = await fetch("/overnachtingen.json");
-  const data = await response.json();
-  return data;
-}
 
 async function updateData(newCoordys) {
-  const data = await fetchData();
-  data.slaapCoordinaten.push(newCoordys);
 
-  const response = await fetch("./addSleepSpot.php", {
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(newCoordys),
   });
 
   if (response.ok) {
     const responseData = await response.json();
-    const nr = responseData.slaapCoordinaten.length;
+    const nr = responseData.count;
     feedbackDiv.innerHTML =
       "<br><mark>slaapplek " +
       nr +
       " toegevoegd met coordys: " +
-      responseData.slaapCoordinaten[nr - 1] +
+      responseData.added.lat +
+      "," +
+      responseData.added.lon +
+      " in " +
+      responseData.added.country +
+      " " +
+      responseData.added.flag +
       "</mark>";
   } else {
     console.error("Failed to update data");
@@ -90,13 +95,13 @@ button.addEventListener("click", (event) => {
 
   const coords = coordsInput.value
     .split(",")
-    .map((coord) => parseFloat(coord.trim().toFixed(6)));
+    .map((coord) => parseFloat(coord.trim()).toFixed(6));
 
   if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
     // Use coordinates from the input field if available
-    const newCoordys = [coords[0], coords[1]];
+    const newCoordys = {'lat': coords[0], 'lon': coords[1]};
     updateData(newCoordys).catch((error) =>
-      console.error("Error updating data:", error)
+      console.error("Toevoegen niet gelukt: ", error)
     );
   } else {
     // Use Geolocation API if the input field is empty or invalid
@@ -110,7 +115,7 @@ button.addEventListener("click", (event) => {
         ];
 
         updateData(newCoordys).catch((error) =>
-          console.error("Error updating data:", error)
+          console.error("Toevoegen niet gelukt: ", error)
         );
       },
       (error) => {
