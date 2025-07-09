@@ -45,6 +45,11 @@ function getCountryData($lat, $lng) {
 
 // 📥 Lees binnenkomende JSON
 $incoming = json_decode(file_get_contents('php://input'), true);
+if ($incoming === null) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Invalid JSON received']);
+    exit;
+}
 
 $lat = (float) round($incoming['lat'], 6);
 $lng = (float) round($incoming['lon'], 6);
@@ -58,6 +63,11 @@ $flag = $geo['country_code'] ? countryCodeToEmoji($geo['country_code']) : null;
 // 📂 Bestaande data inladen
 if (file_exists($jsonFilePath)) {
     $existing = json_decode(file_get_contents($jsonFilePath), true);
+    if ($existing === null) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Could not decode existing JSON file']);
+        exit;
+    }
 } else {
     $existing = ['slaapCoordinaten' => []];
 }
@@ -78,5 +88,6 @@ $existing['slaapCoordinaten'][] = [
 if (file_put_contents($jsonFilePath, json_encode($existing, JSON_UNESCAPED_UNICODE))) {
     echo json_encode(['success' => true, 'count' => count($existing['slaapCoordinaten']), 'added' => end($existing['slaapCoordinaten'])]);
 } else {
-    echo json_encode(['error' => 'Kon JSON bestand niet wegschrijven']);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Kon JSON bestand niet wegschrijven']);
 }

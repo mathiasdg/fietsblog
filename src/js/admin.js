@@ -53,39 +53,59 @@ function initMap() {
 
 
 async function updateData(newCoordys) {
-
+  // disable button while waiting for response
   button.disabled = true;
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newCoordys),
-  });
+  try {
+    // show loading indicator
+    feedbackDiv.innerHTML = "<br><mark>Bezig met toevoegen...</mark>";
 
-  if (response.ok) {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newCoordys),
+    });
+
     const responseData = await response.json();
-    const nr = responseData.count;
-    feedbackDiv.innerHTML =
-      "<br><mark>slaapplek " +
-      nr +
-      " toegevoegd met coordys: " +
-      responseData.added.lat +
-      "," +
-      responseData.added.lon +
-      " in " +
-      responseData.added.country +
-      " " +
-      responseData.added.flag +
-      "</mark>";
 
-    // redirect to map
-    setTimeout(() => {
-      window.location = '/';
-    }, 1690);
-  } else {
-    console.error("Failed to update data");
+    if (response.ok && responseData.success) {
+      const nr = responseData.count;
+      feedbackDiv.innerHTML =
+        "<br><mark>slaapplek " +
+        nr +
+        " toegevoegd met coordys: " +
+        responseData.added.lat +
+        "," +
+        responseData.added.lon +
+        " in " +
+        responseData.added.country +
+        " " +
+        responseData.added.flag +
+        "</mark>";
+
+      // redirect to map
+      setTimeout(() => {
+        window.location = '/';
+      }, 1690);
+
+    } else {
+      // Show backend error message
+      feedbackDiv.innerHTML =
+        "<br><mark>Fout: " +
+        (responseData.error || "Onbekende fout") +
+        "</mark>";
+    
+      // enable button again for next try
+      button.disabled = false;
+
+    }
+  } catch (error) {
+    // Show network or unexpected error
+    feedbackDiv.innerHTML =
+      "<br><mark>Netwerk- of serverfout: " + error.message + "</mark>";
+    console.error("Toevoegen niet gelukt: ", error);
   }
 }
 
@@ -99,7 +119,7 @@ button.addEventListener("click", (event) => {
 
   if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
     // Use coordinates from the input field if available
-    const newCoordys = {'lat': coords[0], 'lon': coords[1]};
+    const newCoordys = { 'lat': coords[0], 'lon': coords[1] };
     updateData(newCoordys).catch((error) =>
       console.error("Toevoegen niet gelukt: ", error)
     );
