@@ -28,6 +28,14 @@ jobs:
           ls -la dist
           echo "Current commit:"
           git log -1
+      
+      - name: Copy built files to staging
+        run: |
+          mkdir -p staging
+          cp -r dist/* staging/
+          cp admin.html staging/
+          cp admin.js staging/
+          cp -r api/ staging/
 
 
       - name: 🚀 Deploy via FTP
@@ -36,10 +44,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
+          local-dir: ./staging
           server-dir: domains/bladsteenschaar.be/public_html/
-          include: |
-            dist/**
-            admin.html
-            admin.js
-            api/**
