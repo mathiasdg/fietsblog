@@ -50,6 +50,7 @@ class MapHandler {
       this.animateCampingLocations.bind(this),
       animationDuration - 3690
     );
+    this.segmentPolylines = [];
   }
 
   initializeMap() {
@@ -133,11 +134,15 @@ class MapHandler {
     const afgelegdeRoute = L.polyline(latLngsAfgelegdeRoute, {
       color: "#116944",
       weight: 6.9,
+      opacity: 0.87,
+
     });
 
     const afgelegdeRouteVoorAnimatie = L.polyline([], {
       color: "#116944",
       weight: 6.9,
+      opacity: 0.87,
+
     }).addTo(this.map);
 
     const eindPunt = latLngsTotaleRoute[latLngsTotaleRoute.length - 1];
@@ -183,7 +188,18 @@ class MapHandler {
       this.map.addLayer(afgelegdeRoute);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
     }, animationDuration);
-    setTimeout(() => clearInterval(intervalID), animationDuration + 169);
+    setTimeout(() => {
+      // Remove the animated route
+      this.map.removeLayer(afgelegdeRouteVoorAnimatie);
+      // Add the static route
+      this.map.addLayer(afgelegdeRoute);
+      // Re-add all segment polylines
+      // this.segmentPolylines.forEach(polyline => {
+      //   if (!this.map.hasLayer(polyline)) {
+      //     this.map.addLayer(polyline);
+      //   }
+      // });
+    }, animationDuration + 169);
 
     // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
     this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
@@ -239,21 +255,28 @@ class MapHandler {
       
       // Extract the segment coordinates
       const segmentCoordinates = routeCoordinates.slice(currentIndex, nextIndex + 1);
+      // console.log(segmentCoordinates)
+
+      const koloor = '#' + (10+Math.floor(Math.random()*90)).toString() + (10+Math.floor(Math.random()*90)).toString() + (10+Math.floor(Math.random()*90)).toString();
+      // console.log(i+1, koloor)
       
       // Create a polyline for this segment and calculate its length
-      const segmentPolyline = L.polyline(segmentCoordinates);
+      const segmentPolyline = L.polyline(segmentCoordinates, {
+        color: koloor,
+        opacity: 0.99,
+        weight: 22,
+      })
+      // .addTo(this.map);
       const segmentLength = L.GeometryUtil.length(segmentPolyline);
 
-      // mark start and endpoint on the map
+      // this.segmentPolylines.push(segmentPolyline);
 
+  
 
-
-      
       segmentLengths.push({
         segment: i + 1,
         from: overnightLocations[i].flag || `Location ${i + 1}`,
         to: overnightLocations[i + 1].flag || `Location ${i + 2}`,
-        // length: segmentLength,
         lengthKm: (segmentLength / 1000).toFixed(1)
       });
     }
@@ -300,8 +323,8 @@ class MapHandler {
       
       const tooltipText = `<h2>Etappe ${++i} </h2>
       <h1>${land}</h1>
-      <h3>${etappe.lengthKm} km</h3>`;
-      // <img width='369px' src='/images/slaapspots/${i}.webp' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
+      <h3>${etappe.lengthKm} km</h3>
+      <img width='369px' src='/images/slaapspots/raw/${i}.jpg' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
 
       L.marker(campingCoordinates, { icon: tentjeIcon })
         .addTo(this.map)

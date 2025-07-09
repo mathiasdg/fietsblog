@@ -8,6 +8,8 @@ nuffige_links.txt
 overnachtingen.json
 public/overnachtingen.json
 backupstuff
+posts
+*.md
 
 ### Node ###
 # Logs
