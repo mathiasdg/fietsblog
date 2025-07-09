@@ -1,4 +1,4 @@
-name: OHLALAAAA => Build & Deploy Static Site (Bun + FTP)
+name: Build & Deploy to bladsteenschaar.be
 
 on:
   push:
@@ -36,5 +36,10 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: dist/
+          local-dir: ./
           server-dir: domains/bladsteenschaar.be/public_html/
+          include: |
+            dist/**
+            admin.html
+            admin.js
+            api/**
