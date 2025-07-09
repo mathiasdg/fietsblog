@@ -54,6 +54,8 @@ function initMap() {
 
 async function updateData(newCoordys) {
 
+  button.disabled = true;
+
   const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
@@ -77,6 +79,11 @@ async function updateData(newCoordys) {
       " " +
       responseData.added.flag +
       "</mark>";
+
+    // redirect to map
+    setTimeout(() => {
+      window.location = '/';
+    }, 1690);
   } else {
     console.error("Failed to update data");
   }

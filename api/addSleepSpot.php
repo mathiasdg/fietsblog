@@ -4,7 +4,16 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: application/json');   
+header('Content-Type: application/json');
+
+// Detecteer of we in development zijn
+$isLocal = $_SERVER['HTTP_HOST'] === 'localhost' || 
+           strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
+
+// 📁 Pad naar json
+$jsonFilePath = $isLocal 
+    ? '../public/overnachtingen.json' 
+    : '../overnachtingen.json';
 
 // 🔄 Functie om vlag te halen
 function countryCodeToEmoji(string $code): string {
@@ -45,9 +54,6 @@ $foto = $incoming['foto'] ?? null;
 $geo = getCountryData($lat, $lng);
 $country = $geo['country'] ?? null;
 $flag = $geo['country_code'] ? countryCodeToEmoji($geo['country_code']) : null;
-
-// 📁 Pad naar json
-$jsonFilePath = '../public/overnachtingen.json';
 
 // 📂 Bestaande data inladen
 if (file_exists($jsonFilePath)) {
