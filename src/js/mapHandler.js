@@ -59,7 +59,7 @@ class MapHandler {
     // this.processData();
     setTimeout(
       this.animateCampingLocations.bind(this),
-      animationDuration - 2000
+      animationDuration - 3690
     );
   }
 
