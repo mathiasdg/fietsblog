@@ -58,7 +58,7 @@ async function updateData(newCoordys) {
 
   try {
     // show loading indicator
-    feedbackDiv.innerHTML = "<br><mark>Bezig met toevoegen...</mark>";
+    feedbackDiv.innerHTML = "<br><img src='images/loading.gif' alt='spinner ...' /> <mark>Bezig met toevoegen...</mark>";
 
     const response = await fetch(apiUrl, {
       method: "POST",
