@@ -1,17 +1,10 @@
 const button = document.querySelector("#nieuw");
 const coordsInput = document.querySelector("#coords");
 const feedbackDiv = document.querySelector("#feedback");
-const map = document.querySelector("#map");
+// const map = document.querySelector("#map");
 let deviceCoords = null;
 const defaultCoords = [46.69, 21.69]; // update tijdens de reis
-const mode = import.meta.env.VITE_MODE;
-let apiUrl = "";
-
-if (mode === "dev") {
-  apiUrl = "http://localhost/fietsblog/api/addSleepSpot.php";
-} else {
-  apiUrl = "./api/addSleepSpot.php";
-}
+const apiUrl = import.meta.env.VITE_API_URL || './api/addSleepSpot.php';
 
 navigator.geolocation.getCurrentPosition(
   (position) => {
