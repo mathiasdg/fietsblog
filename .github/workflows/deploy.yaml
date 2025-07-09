@@ -33,8 +33,6 @@ jobs:
         run: |
           mkdir -p staging
           cp -r dist/* staging/
-          cp admin.html staging/
-          cp admin.js staging/
           cp -r api/ staging/
 
 

@@ -5,8 +5,13 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: './',
   build: {
-    // basePath: "./",
     target: "esnext",
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        admin: 'admin.html'
+      }
+    }
   },
   server: {
     open: true,
