@@ -5,7 +5,7 @@ const animationDuration = 6900;
 const dag = new Date().getDay();
 const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
 const overnachtingen = await fetchOvernachtingenData();
-const etappes = []
+let etappes = []
 
 
 // fetch de overnachtingen uit de dynamische json file
@@ -18,10 +18,6 @@ async function fetchOvernachtingenData() {
 
 const tilesURL =
   "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
-// "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg";
-// "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.jpg";
-// "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}{r}.jpg";
-// "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 // Icons
 const fietsjeIcon = L.icon({
@@ -32,13 +28,6 @@ const fietsjeIcon = L.icon({
   className: "fietser",
 });
 
-// const tentjeIcon = L.icon({
-//   iconUrl: "./images/tentie.svg",
-//   iconSize: [33, 33],
-//   iconAnchor: [16, 16],
-//   tooltipAnchor: [16, 0],
-//   className: "tentie",
-// });
 const tentjeIcon = L.divIcon({
   iconSize: [44, 44],
   iconAnchor: [22, 22],
@@ -48,7 +37,7 @@ const tentjeIcon = L.divIcon({
 const finishIcon = L.icon({
   iconUrl: "./images/finish.png",
   iconSize: [33, 33],
-  iconAnchor: [15, 30],
+  iconAnchor: [10, 30],
 });
 
 class MapHandler {
@@ -126,8 +115,8 @@ class MapHandler {
     }
 
     // Calculate segment lengths between overnight locations
-    const segmentLengths = this.calculateSegmentLengths(latLngsTotaleRoute, overnachtingen);
-    console.log('Segment lengths:', segmentLengths);  
+    etappes = this.calculateSegmentLengths(latLngsTotaleRoute, overnachtingen);
+    // console.log('Segment lengths:', etappes);
 
     const totaleRoute = L.polyline(latLngsTotaleRoute, {
       color: "#ff6944",
@@ -156,24 +145,6 @@ class MapHandler {
       icon: finishIcon,
     }).addTo(this.map);
 
-    // L.polylineDecorator(totaleRoute, {
-    //   patterns: [
-    //     {
-    //       offset: "100%",
-    //       repeat: 22,
-    //       symbol: L.Symbol.marker({
-    //         rotate: false,
-    //         markerOptions: {
-    //           icon: L.icon({
-    //             iconUrl: "./images/vuurwerk.gif",
-    //             iconSize: [369, 369],
-    //           }),
-    //         },
-    //       }),
-    //     },
-    //   ],
-    // });
-    // .addTo(this.map);
 
     const fietsMarker = L.marker(latLngsTotaleRoute[0], {
       icon: fietsjeIcon,
@@ -207,17 +178,16 @@ class MapHandler {
       latLngsAfgelegdeRoute,
       fietsMarker
     );
+
     const intervalID = setInterval(() => {
       this.map.addLayer(afgelegdeRoute);
-      // this.map.removeLayer(fietsMarker);
       this.map.removeLayer(afgelegdeRouteVoorAnimatie);
-      // this.map.fitBounds(totaleRoute.getBounds(), { padding: [69, 69] });
-      // this.map.setView(eindPunt, 9);
     }, animationDuration);
     setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
-    this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [69, 69] });
-    // this.map.fitBounds(totaleRoute.getBounds(), { padding: [2, 3] });
+    // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
+    this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
+
 
     return {
       lengteTotaleRoute,
@@ -238,6 +208,7 @@ class MapHandler {
     const timer = setInterval(_ => {
       if (i >= routeCoordinates.length) {
         clearInterval(timer);
+        this.map.fitBounds(route.getBounds(), { padding: [12, 33] });
         return;
       }
       route.addLatLng(routeCoordinates[i]);
@@ -272,13 +243,18 @@ class MapHandler {
       // Create a polyline for this segment and calculate its length
       const segmentPolyline = L.polyline(segmentCoordinates);
       const segmentLength = L.GeometryUtil.length(segmentPolyline);
+
+      // mark start and endpoint on the map
+
+
+
       
       segmentLengths.push({
         segment: i + 1,
         from: overnightLocations[i].flag || `Location ${i + 1}`,
         to: overnightLocations[i + 1].flag || `Location ${i + 2}`,
-        length: segmentLength,
-        lengthKm: (segmentLength / 1000).toFixed(2)
+        // length: segmentLength,
+        lengthKm: (segmentLength / 1000).toFixed(1)
       });
     }
     
@@ -314,24 +290,24 @@ class MapHandler {
         clearInterval(timer);
         return;
       }
-      
-      // const etappeLengte = L.GeometryUtil.length(totaleRoute);
-      // console.log(etappeLengte);
-
-
       const campingData = overnachtingen[i];
       const campingCoordinates = [campingData['lat'], campingData['lon']];
+      const etappe = etappes[i]
+      const land = (etappe.from === etappe.to) ? etappe.from : `${etappe.from} &#8611; ${etappe.to}`;
+      // console.log(etappe)
 
-      const tooltipText = `<h2>Etappe ${i + 1} ${campingData.flag}</h2>`;
-      // <br> totaal bestierde afstand: ${campingData.kmTotHier}`;
-      // <br>${campingCoordinates}`;
+      // const tooltipText = `<h2>Etappe ${++i} ${campingData.flag}</h2>`;
+      
+      const tooltipText = `<h2>Etappe ${++i} </h2>
+      <h1>${land}</h1>
+      <h3>${etappe.lengthKm} km</h3>`;
+      // <img width='369px' src='/images/slaapspots/${i}.webp' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
 
       L.marker(campingCoordinates, { icon: tentjeIcon })
         .addTo(this.map)
         .bindTooltip(tooltipText);
 
-      i++;
-    }, 69);
+    }, 87);
   }
 }
 

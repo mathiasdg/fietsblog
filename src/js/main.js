@@ -36,9 +36,9 @@ const totaalKilometers = Number(routeData.lengteTotaleRoute / 1000).toFixed(0);
 let afgelegdeKilometers = Number(
   (routeData.lengteAfgelegdeRoute / 1000).toFixed(0)
 );
-console.log(afgelegdeKilometers)
+// console.log(afgelegdeKilometers)
 const afgelegdPercentage = (afgelegdeKilometers / totaalKilometers).toFixed(2);
-console.log(afgelegdPercentage)
+// console.log(afgelegdPercentage)
 
 // Initialize ProgressBar
 const bar = new ProgressBar.Line("#bar", {
