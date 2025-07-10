@@ -19,17 +19,17 @@ export default defineConfig({
   },
   plugins: [
       // lightboxHrefPlugin(), // Add our custom plugin
-      ViteImageOptimizer({
-        dir: "processed",
-        webp: {
-          quality: 80,
-          progressive: true,
-        },
-        jpg: {
-          quality: 80,
-          progressive: true,
-        },
-      }),
+      // ViteImageOptimizer({
+      //   dir: "processed",
+      //   webp: {
+      //     quality: 80,
+      //     progressive: true,
+      //   },
+      //   jpg: {
+      //     quality: 80,
+      //     progressive: true,
+      //   },
+      // }),
    ] 
   // plugins: [
   //   basicSsl({
