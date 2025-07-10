@@ -10,6 +10,7 @@ public/overnachtingen.json
 backupstuff
 posts
 *.md
+public/images/slaapspots/raw
 
 ### Node ###
 # Logs

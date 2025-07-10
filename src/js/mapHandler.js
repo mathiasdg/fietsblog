@@ -345,7 +345,7 @@ class MapHandler {
       const tooltipText = `<h2>Etappe ${++i} </h2>
       <h1>${land}</h1>
       <h3>${etappe.lengthKm} km</h3>
-      <img width='220px' src='/images/slaapspots/raw/${i}.jpg' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
+      <img width='220px' src='/images/slaapspots/${i}.webp' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
 
       const tentIndex = i;
       const tentMarker = L.marker(campingCoordinates, { icon: tentjeIcon })
@@ -372,7 +372,6 @@ class MapHandler {
       //   }
       // });
 
-      i++;
     }, 87);
   }
 }

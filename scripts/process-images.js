@@ -1,11 +1,11 @@
 import { readdir, mkdir, stat } from "node:fs/promises";
 import { join, parse } from "node:path";
 import sharp from "sharp";
-
-const sourceDir = "./img";
-const outputDir = "./processed";
-const maxWidth = 1234;
-const maxHeight = 870;
+const path = "./public/images/slaapspots"
+const sourceDir = path + "/raw";
+const outputDir = path;
+const maxWidth = 220;
+const maxHeight = 220;
 
 function formatBytes(bytes) {
   const sizes = ["Bytes", "KB", "MB"];
@@ -90,7 +90,7 @@ async function processImages() {
   console.log("🔍 Scanning for images...");
 
   try {
-    await mkdir(outputDir, { recursive: true });
+    // await mkdir(outputDir, { recursive: true });
     await processImagesInDir(sourceDir, outputDir);
 
     console.log("\n🎉 Image processing complete!");
