@@ -1,15 +1,18 @@
 {
   "name": "fietsblog",
   "private": true,
-  "version": "1.69.0",
+  "version": "1.69.69",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images": "bun run ./scripts/process-images.js"    
   },
   "devDependencies": {
-    "vite": "^7.0.3"
+    "vite": "^7.0.3",
+    "sharp": "^0.33.5",
+    "vite-plugin-image-optimizer": "^1.1.8"
   },
   "dependencies": {
     "animate.css": "^4.1.1",
@@ -17,6 +20,7 @@
     "leaflet-transitionedicon": "^0.2.1",
     "leaflet.motion": "^0.3.2",
     "light-modal": "^1.2.1",
-    "progressbar.js": "^1.1.1"
+    "progressbar.js": "^1.1.1",
+    "fslightbox": "^3.5.1"
   }
 }

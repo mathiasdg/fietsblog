@@ -194,11 +194,11 @@ class MapHandler {
       // Add the static route
       this.map.addLayer(afgelegdeRoute);
       // Re-add all segment polylines
-      // this.segmentPolylines.forEach(polyline => {
-      //   if (!this.map.hasLayer(polyline)) {
-      //     this.map.addLayer(polyline);
-      //   }
-      // });
+      this.segmentPolylines.forEach(polyline => {
+        if (!this.map.hasLayer(polyline)) {
+          this.map.addLayer(polyline);
+        }
+      });
     }, animationDuration + 169);
 
     // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
