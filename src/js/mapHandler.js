@@ -51,6 +51,8 @@ class MapHandler {
       animationDuration - 3690
     );
     this.segmentPolylines = [];
+    this.tentMarkers = [];
+
   }
 
   initializeMap() {
@@ -194,11 +196,11 @@ class MapHandler {
       // Add the static route
       this.map.addLayer(afgelegdeRoute);
       // Re-add all segment polylines
-      this.segmentPolylines.forEach(polyline => {
-        if (!this.map.hasLayer(polyline)) {
-          this.map.addLayer(polyline);
-        }
-      });
+      // for (const polyline of this.segmentPolylines) {
+      //   if (!this.map.hasLayer(polyline)) {
+      //     this.map.addLayer(polyline);
+      //   }
+      // };
     }, animationDuration + 169);
 
     // this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
@@ -244,43 +246,64 @@ class MapHandler {
    */
   calculateSegmentLengths(routeCoordinates, overnightLocations) {
     const segmentLengths = [];
-    
+
+    // 1. Add segment from start to first overnight location
+    if (overnightLocations.length > 0) {
+      const firstLocation = [overnightLocations[0].lat, overnightLocations[0].lon];
+      const firstIndex = this.findClosestRoutePoint(routeCoordinates, firstLocation);
+
+      const segmentCoordinates = routeCoordinates.slice(0, firstIndex + 1);
+      const koloor = '#' + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString();
+
+      const segmentPolyline = L.polyline(segmentCoordinates, {
+        color: koloor,
+        opacity: 0, // initially hidden
+        weight: 22,
+      }).addTo(this.map);
+
+      this.segmentPolylines.push(segmentPolyline);
+
+      const segmentLength = L.GeometryUtil.length(segmentPolyline);
+
+      segmentLengths.push({
+        segment: 1,
+        // from: "Start 'Donaueschingen",
+        from: overnightLocations[0].flag || `Slaapplek 1`,
+        to: overnightLocations[0].flag || `Slaapplek 1`,
+        lengthKm: (segmentLength / 1000).toFixed(1)
+      });
+    }
+
+    // 2. Add segments between overnight locations
     for (let i = 0; i < overnightLocations.length - 1; i++) {
       const currentLocation = [overnightLocations[i].lat, overnightLocations[i].lon];
       const nextLocation = [overnightLocations[i + 1].lat, overnightLocations[i + 1].lon];
-      
-      // Find the closest route points to these overnight locations
+
       const currentIndex = this.findClosestRoutePoint(routeCoordinates, currentLocation);
       const nextIndex = this.findClosestRoutePoint(routeCoordinates, nextLocation);
-      
-      // Extract the segment coordinates
-      const segmentCoordinates = routeCoordinates.slice(currentIndex, nextIndex + 1);
-      // console.log(segmentCoordinates)
 
-      const koloor = '#' + (10+Math.floor(Math.random()*90)).toString() + (10+Math.floor(Math.random()*90)).toString() + (10+Math.floor(Math.random()*90)).toString();
-      // console.log(i+1, koloor)
-      
-      // Create a polyline for this segment and calculate its length
+      const segmentCoordinates = routeCoordinates.slice(currentIndex, nextIndex + 1);
+      const koloor = '#' + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString();
+
       const segmentPolyline = L.polyline(segmentCoordinates, {
         color: koloor,
-        opacity: 0.99,
+        opacity: 0, // initially hidden
         weight: 22,
       })
       // .addTo(this.map);
+
+      this.segmentPolylines.push(segmentPolyline);
+
       const segmentLength = L.GeometryUtil.length(segmentPolyline);
 
-      // this.segmentPolylines.push(segmentPolyline);
-
-  
-
       segmentLengths.push({
-        segment: i + 1,
+        segment: i + 2,
         from: overnightLocations[i].flag || `Location ${i + 1}`,
         to: overnightLocations[i + 1].flag || `Location ${i + 2}`,
         lengthKm: (segmentLength / 1000).toFixed(1)
       });
     }
-    
+
     return segmentLengths;
   }
 
@@ -317,19 +340,39 @@ class MapHandler {
       const campingCoordinates = [campingData['lat'], campingData['lon']];
       const etappe = etappes[i]
       const land = (etappe.from === etappe.to) ? etappe.from : `${etappe.from} &#8611; ${etappe.to}`;
-      // console.log(etappe)
 
-      // const tooltipText = `<h2>Etappe ${++i} ${campingData.flag}</h2>`;
-      
+      // const tooltipText = `<h2>Etappe ${++i} ${campingData.flag}</h2>`;  
       const tooltipText = `<h2>Etappe ${++i} </h2>
       <h1>${land}</h1>
       <h3>${etappe.lengthKm} km</h3>
-      <img width='369px' src='/images/slaapspots/raw/${i}.jpg' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
+      <img width='220px' src='/images/slaapspots/raw/${i}.jpg' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
 
-      L.marker(campingCoordinates, { icon: tentjeIcon })
+      const tentIndex = i;
+      const tentMarker = L.marker(campingCoordinates, { icon: tentjeIcon })
         .addTo(this.map)
-        .bindTooltip(tooltipText);
+        .bindTooltip(tooltipText)
+        // .bindPopup(tooltipText);
 
+      // Store reference to tent marker
+      // this.tentMarkers[tentIndex] = tentMarker;
+
+      // Add click event to show the corresponding segment polyline
+      // tentMarker.on('click', () => {
+      //   // Hide all segments first
+      //   for (const poly of this.segmentPolylines) {
+      //     poly.setStyle({ opacity: 0 });
+      //   }
+
+      //   // Show only the clicked segment
+      //   if (this.segmentPolylines[tentIndex]) {
+      //     this.segmentPolylines[tentIndex].setStyle({ opacity: 1 });
+      //     if (this.segmentPolylines[tentIndex].bringToFront) {
+      //       this.segmentPolylines[tentIndex].bringToFront();
+      //     }
+      //   }
+      // });
+
+      i++;
     }, 87);
   }
 }
