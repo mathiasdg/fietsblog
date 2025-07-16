@@ -83,7 +83,7 @@ class MapHandler {
     } else {
       laatsteSlaapplek = 0;
     }
-    let minDist = Infinity;
+    let minDist = Number.POSITIVE_INFINITY;
     let dichtstePunt;
     // let afstand = 0;
     let vorigePunt = [
@@ -159,13 +159,13 @@ class MapHandler {
 
     // Function to combine the transforms
     function applyTransform() {
-      var element = document.querySelector(".fietser");
+      const element = document.querySelector(".fietser");
       if (element) {
-        var currentTransform = window.getComputedStyle(element).transform;
-        var newTransform = "scaleX(-1)";
+        const currentTransform = window.getComputedStyle(element).transform;
+        let newTransform = "scaleX(-1)";
 
         if (currentTransform !== "none") {
-          newTransform = currentTransform + " " + newTransform;
+          newTransform = `${currentTransform} ${newTransform}`;
         }
 
         element.style.transform = newTransform;
@@ -253,7 +253,7 @@ class MapHandler {
       const firstIndex = this.findClosestRoutePoint(routeCoordinates, firstLocation);
 
       const segmentCoordinates = routeCoordinates.slice(0, firstIndex + 1);
-      const koloor = '#' + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString();
+      const koloor = `#${(9+Math.floor(Math.random()*90)).toString()}${(9+Math.floor(Math.random()*90)).toString()}${(9+Math.floor(Math.random()*90)).toString()}`;
 
       const segmentPolyline = L.polyline(segmentCoordinates, {
         color: koloor,
@@ -268,8 +268,8 @@ class MapHandler {
       segmentLengths.push({
         segment: 1,
         // from: "Start 'Donaueschingen",
-        from: overnightLocations[0].flag || `Slaapplek 1`,
-        to: overnightLocations[0].flag || `Slaapplek 1`,
+        from: overnightLocations[0].flag || "Slaapplek 1",
+        to: overnightLocations[0].flag || "Slaapplek 1",
         lengthKm: (segmentLength / 1000).toFixed(1)
       });
     }
@@ -283,7 +283,7 @@ class MapHandler {
       const nextIndex = this.findClosestRoutePoint(routeCoordinates, nextLocation);
 
       const segmentCoordinates = routeCoordinates.slice(currentIndex, nextIndex + 1);
-      const koloor = '#' + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString() + (9+Math.floor(Math.random()*90)).toString();
+      const koloor = `#${(9+Math.floor(Math.random()*90)).toString()}${(9+Math.floor(Math.random()*90)).toString()}${(9+Math.floor(Math.random()*90)).toString()}`;
 
       const segmentPolyline = L.polyline(segmentCoordinates, {
         color: koloor,
@@ -314,7 +314,7 @@ class MapHandler {
    * @returns {number} Index of closest route coordinate
    */
   findClosestRoutePoint(routeCoordinates, targetLocation) {
-    let minDistance = Infinity;
+    let minDistance = Number.POSITIVE_INFINITY;
     let closestIndex = 0;
     
     for (let i = 0; i < routeCoordinates.length; i++) {
@@ -337,7 +337,7 @@ class MapHandler {
         return;
       }
       const campingData = overnachtingen[i];
-      const campingCoordinates = [campingData['lat'], campingData['lon']];
+      const campingCoordinates = [campingData.lat, campingData.lon];
       const etappe = etappes[i]
       const land = (etappe.from === etappe.to) ? etappe.from : `${etappe.from} &#8611; ${etappe.to}`;
 
