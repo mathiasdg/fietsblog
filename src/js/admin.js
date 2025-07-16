@@ -1,6 +1,8 @@
 const button = document.querySelector("#nieuw");
 const coordsInput = document.querySelector("#coords");
-const feedbackDiv = document.querySelector("#feedback");
+const fotoInput = document.querySelector("#foto");
+const feedbackText = document.querySelector("#feedback-text");
+const spinner = document.querySelector("#spinner");
 // const map = document.querySelector("#map");
 let deviceCoords = null;
 const defaultCoords = [46.69, 21.69]; // update tijdens de reis
@@ -33,7 +35,7 @@ function initMap() {
   let marker = L.marker(deviceCoords).addTo(mapz);
 
   // Add marker on click
-  mapz.on("click", function (e) {
+  mapz.on("click", (e) => {
     const { lat, lng } = e.latlng;
     if (marker) {
       marker.setLatLng(e.latlng);
@@ -52,38 +54,32 @@ function initMap() {
 // }, 3690);
 
 
-async function updateData(newCoordys) {
+async function updateData(formData) {
   // disable button while waiting for response
   button.disabled = true;
 
   try {
     // show loading indicator
-    feedbackDiv.innerHTML = "<br><img src='images/loading.gif' alt='spinner ...' /> <mark>Bezig met toevoegen...</mark>";
+    spinner.style.display = "inline-block";
+    feedbackText.innerHTML = "<mark>Bezig met toevoegen...</mark>";
 
     const response = await fetch(apiUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newCoordys),
-    });
+      body: formData
+    })
+      // .then(res => res.json())
+      // .then(data => {
+      //   console.log("✅ Slaapplek toegevoegd", data);
+      //   document.getElementById("feedback").innerText = "✅ Tentje toegevoegd!";
+      // });
 
     const responseData = await response.json();
 
     if (response.ok && responseData.success) {
       const nr = responseData.count;
-      feedbackDiv.innerHTML =
-        "<br><mark>slaapplek " +
-        nr +
-        " toegevoegd met coordys: " +
-        responseData.added.lat +
-        "," +
-        responseData.added.lon +
-        " in " +
-        responseData.added.country +
-        " " +
-        responseData.added.flag +
-        "</mark>";
+      spinner.style.display = "none";
+      feedbackText.innerHTML =
+        `<br><mark>slaapplek ${nr} toegevoegd met coordys: ${responseData.added.lat},${responseData.added.lon} in ${responseData.added.country} ${responseData.added.flag}</mark>`;
 
       // redirect to map
       setTimeout(() => {
@@ -92,10 +88,8 @@ async function updateData(newCoordys) {
 
     } else {
       // Show backend error message
-      feedbackDiv.innerHTML =
-        "<br><mark>Fout: " +
-        (responseData.error || "Onbekende fout") +
-        "</mark>";
+      feedbackText.innerHTML =
+        `<br><mark>Fout: ${responseData.error || "Onbekende fout"}</mark>`;
     
       // enable button again for next try
       button.disabled = false;
@@ -103,8 +97,8 @@ async function updateData(newCoordys) {
     }
   } catch (error) {
     // Show network or unexpected error
-    feedbackDiv.innerHTML =
-      "<br><mark>Netwerk- of serverfout: " + error.message + "</mark>";
+    feedbackText.innerHTML =
+      `<br><mark>Netwerk- of serverfout: ${error.message}</mark>`;
     console.error("Toevoegen niet gelukt: ", error);
   }
 }
@@ -113,14 +107,25 @@ button.addEventListener("click", (event) => {
   event.preventDefault();
   event.stopPropagation();
 
-  const coords = coordsInput.value
-    .split(",")
-    .map((coord) => parseFloat(coord.trim()).toFixed(6));
-
-  if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+    const coordInput = coordsInput.value.trim();
+    const foto = fotoInput.files[0];
+    const [lat, lng] = coordInput.split(",").map(s => Number.parseFloat(s));
+    
+    const formData = new FormData();
+    formData.append("lat", lat.toFixed(6));
+    formData.append("lng", lng.toFixed(6)); 
+    if (foto) {
+      formData.append("foto", foto);
+    }
+    
+    // const coords = coordsInput.value
+    //   .split(",")
+    //   .map((coord) => parseFloat(coord.trim()).toFixed(6));
+    
+  if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
     // Use coordinates from the input field if available
-    const newCoordys = { 'lat': coords[0], 'lon': coords[1] };
-    updateData(newCoordys).catch((error) =>
+    // const newCoordys = { 'lat': coordInput[0], 'lon': coordInput[1] };
+    updateData(formData).catch((error) =>
       console.error("Toevoegen niet gelukt: ", error)
     );
   } else {
@@ -137,6 +142,9 @@ button.addEventListener("click", (event) => {
         updateData(newCoordys).catch((error) =>
           console.error("Toevoegen niet gelukt: ", error)
         );
+        // enable button again for next try
+        button.disabled = false;
+        
       },
       (error) => {
         console.error("Error getting geolocation:", error);

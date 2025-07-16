@@ -2,10 +2,10 @@ import { readdir, mkdir, stat } from "node:fs/promises";
 import { join, parse } from "node:path";
 import sharp from "sharp";
 const path = "./public/images/slaapspots"
-const sourceDir = path + "/raw";
+const sourceDir = `${path}/raw`;
 const outputDir = path;
-const maxWidth = 220;
-const maxHeight = 220;
+const maxWidth = 369;
+const maxHeight = 369;
 
 function formatBytes(bytes) {
   const sizes = ["Bytes", "KB", "MB"];

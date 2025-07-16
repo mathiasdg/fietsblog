@@ -7,12 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "images": "bun run ./scripts/process-images.js"    
+    "images": "bun run ./scripts/process-images.js"
   },
   "devDependencies": {
-    "vite": "^7.0.3",
+    "vite": "^7.0.4",
     "sharp": "^0.33.5",
-    "vite-plugin-image-optimizer": "^1.1.8"
+    "vite-plugin-image-optimizer": "^1.1.9"
   },
   "dependencies": {
     "animate.css": "^4.1.1",
@@ -21,6 +21,6 @@
     "leaflet.motion": "^0.3.2",
     "light-modal": "^1.2.1",
     "progressbar.js": "^1.1.1",
-    "fslightbox": "^3.5.1"
+    "fslightbox": "^3.6.2"
   }
 }

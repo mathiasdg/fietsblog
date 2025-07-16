@@ -41,8 +41,20 @@
         placeholder="coordys ?"
         style="width: 569px"
       />
+      <input
+        id="foto"
+        type="file"
+        name="foto"
+        accept="image/*"
+      />
+    
       <button id="nieuw">voeg tentje toe</button>
-      <div id="feedback"></div>
+      <div id="feedback">
+        <div id="spinner" class="spinner">
+          <img src='images/loading.gif' alt='spinner ...'/> 
+        </div>
+        <div id="feedback-text"></div>
+      </div>
 
       <div
         id="map"

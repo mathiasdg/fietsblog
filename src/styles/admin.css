@@ -34,3 +34,10 @@
         border: none !important;
         background: transparent !important;
       }
+
+      .spinner {
+        display: none;
+      }
+      #feedback-text {
+        display: inline-block;
+      }
