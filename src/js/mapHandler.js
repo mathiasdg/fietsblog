@@ -340,12 +340,17 @@ class MapHandler {
       const campingCoordinates = [campingData.lat, campingData.lon];
       const etappe = etappes[i]
       const land = (etappe.from === etappe.to) ? etappe.from : `${etappe.from} &#8611; ${etappe.to}`;
+      // const tentFoto = file_exists ? true : false
+      const tentFoto = true
 
       // const tooltipText = `<h2>Etappe ${++i} ${campingData.flag}</h2>`;  
-      const tooltipText = `<h2>Etappe ${++i} </h2>
+      let tooltipText = `<h2>Etappe ${++i} </h2>
       <h1>${land}</h1>
-      <h3>${etappe.lengthKm} km</h3>
-      <img width='220px' src='/images/slaapspots/${i}.webp' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
+      <h3>${etappe.lengthKm} km</h3>`;
+
+      if (tentFoto) {
+        tooltipText += `<img width='220px' src='/images/slaapspots/${i}.webp' alt='slaapplek ${i}' /> `; //${campingCoordinates}`;
+      }
 
       const tentIndex = i;
       const tentMarker = L.marker(campingCoordinates, { icon: tentjeIcon })
