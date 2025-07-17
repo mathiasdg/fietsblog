@@ -130,11 +130,11 @@ function processImage($filename, $uploadDir): array
             $src = imagecreatefromstring(file_get_contents($tmpPath));
             $dst = imagecreatetruecolor($newWidth, $newHeight);
             imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-            echo imagejpeg($dst, $destination, 87);  // 87% kwaliteit
+            imagejpeg($dst, $destination, 87);  // 87% kwaliteit
             imagedestroy($src);
             imagedestroy($dst);
         } else {
-            echo move_uploaded_file($tmpPath, $destination);
+            move_uploaded_file($tmpPath, $destination);
         }
         return array('bool' => true, 'msg' => 'Foto succesvol geupload');
     } else {
