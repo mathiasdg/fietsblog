@@ -3,22 +3,24 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 
 ini_set('error_reporting', false);
 
 $sleepSpotNumber = null;
 // Detecteer of we in development zijn
-$isLocal = $_SERVER['HTTP_HOST'] === 'localhost' || 
-           strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
+$isLocal = $_SERVER['HTTP_HOST'] === 'localhost' ||
+    strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
 
 // 📁 Pad naar json
-$jsonFilePath = $isLocal 
-    ? '../public/overnachtingen.json' 
+$jsonFilePath = $isLocal
+    ? '../public/overnachtingen.json'
     : '../overnachtingen.json';
 
-// Map en JSON pad
-$uploadDir = '../public/images/slaapspots/';
+// 📁 Pad naar slaapspot upload dir
+$uploadDir = $isLocal
+    ? '../public/images/slaapspots/'
+    : '../images/slaapspots/';
 
 // 📥 Lees binnenkomende POST vars
 if (empty($_POST)) {
@@ -59,27 +61,29 @@ $existing['slaapCoordinaten'][] = [
     'lon' => $lng,
     'country' => $country,
     'flag' => $flag,
-    "kmTotHier" => null,
-    "blogTitle" => null,
-    "tentPhoto" => null,
-    "icon" => "tent"
+    'kmTotHier' => null,
+    'blogTitle' => null,
+    'tentPhoto' => $photoUploadedResult['bool'],
+    'icon' => 'tent'
 ];
 
 // 💾 Opslaan
 if (file_put_contents($jsonFilePath, json_encode($existing, JSON_UNESCAPED_UNICODE))) {
-    echo json_encode(['success' => true, 'count' => count($existing['slaapCoordinaten']), 'added' => end($existing['slaapCoordinaten']), 'upload' => $photoUploadedResult]);
+    echo json_encode(['success' => true, 'count' => count($existing['slaapCoordinaten']), 'added' => end($existing['slaapCoordinaten']), 'upload_msg' => $photoUploadedResult['msg']]);
 } else {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Kon JSON bestand niet wegschrijven']);
 }
 
-function dd($var) {
+function dd($var)
+{
     var_dump($var);
     exit;
 }
 
 // 🔄 Functie om vlag te halen
-function countryCodeToEmoji(string $code): string {
+function countryCodeToEmoji(string $code): string
+{
     $code = strtoupper($code);
     $offset = 0x1F1E6;
     $emoji = '';
@@ -89,18 +93,18 @@ function countryCodeToEmoji(string $code): string {
     return $emoji;
 }
 
-function getCountryData($lat, $lng): null|array {
+function getCountryData($lat, $lng): null|array
+{
     $url = "https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=json&zoom=3&addressdetails=1";
     $opts = [
-        "http" => ["header" => "User-Agent: MathiflipAdminScript/69"]
+        'http' => ['header' => 'User-Agent: MathiflipAdminScript/69']
     ];
     $context = stream_context_create($opts);
     $json = file_get_contents($url, false, $context);
-    // dd($json);
     $data = json_decode($json, true);
-    // dd($data);
 
-    if (!isset($data['address'])) return null;
+    if (!isset($data['address']))
+        return null;
 
     return [
         'country' => $data['address']['country'] ?? null,
@@ -108,12 +112,13 @@ function getCountryData($lat, $lng): null|array {
     ];
 }
 
-function processImage($filename, $uploadDir) {
+function processImage($filename, $uploadDir): array
+{
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
         $tmpPath = $_FILES['foto']['tmp_name'];
         $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
         // $filename = $filename . "." . $ext;
-        $filename = $filename . ".webp";
+        $filename = $filename . '.webp';
         $destination = $uploadDir . $filename;
 
         // ❇️ Resize/optimaliseer (max 369px breed)
@@ -125,15 +130,14 @@ function processImage($filename, $uploadDir) {
             $src = imagecreatefromstring(file_get_contents($tmpPath));
             $dst = imagecreatetruecolor($newWidth, $newHeight);
             imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-            imagejpeg($dst, $destination, 87); // 87% kwaliteit
+            echo imagejpeg($dst, $destination, 87);  // 87% kwaliteit
             imagedestroy($src);
             imagedestroy($dst);
         } else {
-            move_uploaded_file($tmpPath, $destination);
+            echo move_uploaded_file($tmpPath, $destination);
         }
-        return 'Foto succesvol geupload';
-
+        return array('bool' => true, 'msg' => 'Foto succesvol geupload');
     } else {
-        return 'Geen foto geupload';
+        return array('bool' => null, 'msg' => 'Geen foto geupload');
     }
 }
