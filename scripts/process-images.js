@@ -7,6 +7,8 @@ const outputDir = path;
 const maxWidth = 369;
 const maxHeight = 369;
 
+const overnachtingenJsonPath = "./public/overnachtingen.json";
+
 function formatBytes(bytes) {
 	const sizes = ["Bytes", "KB", "MB"];
 	if (bytes === 0) return "0 Byte";
@@ -14,7 +16,22 @@ function formatBytes(bytes) {
 	return `${Math.round((bytes / 1024 ** i) * 100) / 100} ${sizes[i]}`;
 }
 
-async function processImagesInDir(dir, outputSubDir) {
+// Load overnachtingen.json and parse it
+async function loadOvernachtingen() {
+	const data = await readFile(overnachtingenJsonPath, "utf8");
+	return JSON.parse(data);
+}
+
+// Save overnachtingen.json
+async function saveOvernachtingen(obj) {
+	await writeFile(
+		overnachtingenJsonPath,
+		JSON.stringify(obj, null, 4),
+		"utf8"
+	);
+}
+
+async function processImagesInDir(dir, outputSubDir, slaapCoordinaten) {
 	try {
 		const files = await readdir(dir, { withFileTypes: true });
 
@@ -26,7 +43,7 @@ async function processImagesInDir(dir, outputSubDir) {
 				// If it's a directory, recurse into it
 				const newOutputDir = join(outputDir, inputPath.replace(sourceDir, ""));
 				await mkdir(newOutputDir, { recursive: true });
-				await processImagesInDir(inputPath, newOutputDir);
+				await processImagesInDir(inputPath, newOutputDir, slaapCoordinaten);
 			} else if (/\.(webp|jpg|jpeg|png)$/i.test(file.name)) {
 				try {
 					// Get original file size
@@ -57,6 +74,21 @@ async function processImagesInDir(dir, outputSubDir) {
 						})
 						.webp()
 						.toFile(outputPath);
+
+					// Set tentPhoto to true if image name matches sleepspot index
+					const match = file.name.match(/^(\d+)\./);
+					if (match) {
+						const index = Number.parseInt(match[1], 10) - 1;
+						if (
+							slaapCoordinaten[index] &&
+							slaapCoordinaten[index].tentPhoto !== true
+						) {
+							slaapCoordinaten[index].tentPhoto = true;
+							console.log(
+								`===> Set tentPhoto: true for slaapCoordinaten[${index}] (${file.name})`
+							);
+						}
+					}
 
 					// Get new file size
 					const newStats = await stat(outputPath);
@@ -90,8 +122,15 @@ async function processImages() {
 	console.log("🔍 Scanning for images...");
 
 	try {
+		// Load overnachtingen.json
+		const overnachtingenObj = await loadOvernachtingen();
+		const slaapCoordinaten = overnachtingenObj.slaapCoordinaten;
+
 		// await mkdir(outputDir, { recursive: true });
-		await processImagesInDir(sourceDir, outputDir);
+		await processImagesInDir(sourceDir, outputDir, slaapCoordinaten);
+
+		// Save overnachtingen.json (after all images processed)
+		await saveOvernachtingen(overnachtingenObj);
 
 		console.log("\n🎉 Image processing complete!");
 		console.log(`Processed images are in: ${outputDir}`);

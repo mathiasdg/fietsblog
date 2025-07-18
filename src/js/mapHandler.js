@@ -2,8 +2,20 @@ import { getDistanceFromLatLonInKm, getEuclideanDistance } from "./utils";
 
 // Constants and Globals
 const animationDuration = 6900;
-const dag = new Date().getDay();
-const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
+const minute = new Date().getMinutes();
+// const ezyOrFiets = dag % 2 ? "ezy" : "fietsje";
+const fietsMarker = (() => {
+	console.log(minute%3)
+	switch (minute%3) {
+	  case 0:
+		return 'ezy';
+	  case 1:
+		return 'oli';
+	  default:
+		return 'fietsje';
+	}
+  })();
+
 const overnachtingen = await fetchOvernachtingenData();
 let etappes = [];
 
@@ -20,7 +32,7 @@ const tilesURL =
 
 // Icons
 const fietsjeIcon = L.icon({
-	iconUrl: `/images/${ezyOrFiets}.svg`,
+	iconUrl: `/images/${fietsMarker}.svg`,
 	iconSize: [44, 44],
 	iconAnchor: [22, 22],
 	tooltipAnchor: [0, 0],
@@ -31,8 +43,16 @@ const tentjeIcon = L.divIcon({
 	iconSize: [44, 44],
 	iconAnchor: [22, 22],
 	tooltipAnchor: [16, 0],
-	html: '<div class="marker animate__animated animate__bounceInDown"></div>',
+	html: '<div class="tent-marker animate__animated animate__bounceInDown"></div>',
 });
+
+const huisjeIcon = L.divIcon({
+	iconSize: [44, 44],
+	iconAnchor: [22, 22],
+	tooltipAnchor: [16, 0],
+	html: '<div class="huis-marker animate__animated animate__bounceInDown"></div>',
+});
+
 const finishIcon = L.icon({
 	iconUrl: "./images/finish.png",
 	iconSize: [33, 33],
@@ -371,10 +391,14 @@ class MapHandler {
 				<h3>${etappe.lengthKm} km</h3>`;
 
 			if (campingData.tentPhoto) {
-				tooltipText += `<img width='220px' src='${imagePath}' alt='slaapplek ${i}' /> `;
+				tooltipText += `<img width='220px' src='${imagePath}' alt='slaapplek ${i+1}' /> `;
+			}
+			let tentMarkerOptions = { icon: tentjeIcon };
+			if (campingData.icon === 'huis') {
+				tentMarkerOptions = { icon: huisjeIcon };
 			}
 
-			const tentMarker = L.marker(campingCoordinates, { icon: tentjeIcon })
+			const tentMarker = L.marker(campingCoordinates, tentMarkerOptions)
 				.addTo(this.map)
 				.bindTooltip(tooltipText);
 

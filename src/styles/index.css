@@ -184,10 +184,10 @@ body {
 
 .fietser {
   /* transform: scaleX(-1); */
-  transform-origin: center;
+  /* transform-origin: center; */
 }
 
-.marker {
+.tent-marker {
   background-image: url(/images/tentie.svg);
   /* background-repeat: no-repeat; */
   background-position: center;
@@ -195,6 +195,16 @@ body {
   width: 44px;
   height: 44px;
 }
+
+.huis-marker {
+  background-image: url(/images/home.svg);
+  /* background-repeat: no-repeat; */
+  background-position: center;
+  background-size: contain;
+  width: 26px;
+  height: 26px;
+}
+
 .leaflet-div-icon {
   border: none;
   background-color: transparent;
