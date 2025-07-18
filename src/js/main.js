@@ -9,7 +9,7 @@ const animationDuration = 4444;
 const extraInfo = document.getElementById("extra-info");
 const statsKnop = document.getElementById("statz");
 const statsModal = document.getElementById("statz-modal-body");
-const logos = document.querySelector(".logo");
+const logos = document.querySelectorAll(".logo");
 
 // load the stats from the external file
 statsModal.innerHTML = await fetch("./stats.html").then((res) => res.text());
@@ -18,12 +18,14 @@ statsKnop.addEventListener("click", stopAnimations);
 setTimeout(animateLogos, animationDuration + 3690);
 
 function animateLogos() {
-  const rubberOrSwing =
-    Math.random() > 0.5 ? "animate__rubberBand" : "animate__swing";
-  logos.classList.add(rubberOrSwing, "animate__infinite", "animate__slower");
+  for (const logo of logos) {
+    const rubberOrSwing =
+      Math.random() > 0.5 ? "animate__rubberBand" : "animate__swing";
+    logo.classList.add(rubberOrSwing, "animate__infinite", "animate__slower");
+  }
 }
 function stopAnimations() {
-  logos.classList.remove("animate__animated");
+    logos[0].classList.remove("animate__animated");
 }
 
 // Initialize the MapHandler
@@ -33,7 +35,7 @@ const routeData = await maphandy.processData();
 // maphandy.processData(); // tweede achtervolger => Eefke
 
 const totaalKilometers = Number(routeData.lengteTotaleRoute / 1000).toFixed(0);
-let afgelegdeKilometers = Number(
+const afgelegdeKilometers = Number(
   (routeData.lengteAfgelegdeRoute / 1000).toFixed(0)
 );
 // console.log(afgelegdeKilometers)
