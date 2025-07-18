@@ -188,6 +188,7 @@ body {
 }
 
 .tent-marker {
+  z-index: 69;
   background-image: url(/images/tentie.svg);
   /* background-repeat: no-repeat; */
   background-position: center;
@@ -197,6 +198,7 @@ body {
 }
 
 .huis-marker {
+  z-index: 68;
   background-image: url(/images/home.svg);
   /* background-repeat: no-repeat; */
   background-position: center;
