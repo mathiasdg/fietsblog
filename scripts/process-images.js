@@ -4,8 +4,8 @@ import sharp from "sharp";
 const path = "./public/images/slaapspots";
 const sourceDir = `${path}/raw`;
 const outputDir = path;
-const maxWidth = 369;
-const maxHeight = 369;
+const maxWidth = 420;
+const maxHeight = 420;
 
 const overnachtingenJsonPath = "./public/overnachtingen.json";
 
@@ -24,11 +24,7 @@ async function loadOvernachtingen() {
 
 // Save overnachtingen.json
 async function saveOvernachtingen(obj) {
-	await writeFile(
-		overnachtingenJsonPath,
-		JSON.stringify(obj, null, 4),
-		"utf8"
-	);
+	await writeFile(overnachtingenJsonPath, JSON.stringify(obj, null, 4), "utf8");
 }
 
 async function processImagesInDir(dir, outputSubDir, slaapCoordinaten) {
@@ -85,7 +81,7 @@ async function processImagesInDir(dir, outputSubDir, slaapCoordinaten) {
 						) {
 							slaapCoordinaten[index].tentPhoto = true;
 							console.log(
-								`===> Set tentPhoto: true for slaapCoordinaten[${index}] (${file.name})`
+								`===> Set tentPhoto: true for slaapCoordinaten[${index}] (${file.name})`,
 							);
 						}
 					}
