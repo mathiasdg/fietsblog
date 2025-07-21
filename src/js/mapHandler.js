@@ -467,9 +467,9 @@ class MapHandler {
 	}
 
 	setActiveButton(btn) {
-		document
-			.querySelectorAll("#segment-controls button")
-			.forEach((b) => b.classList.remove("active"));
+		for (const b of document.querySelectorAll("#segment-controls button")) {
+			b.classList.remove("active");
+		}
 		btn.classList.add("active");
 	}
 }
