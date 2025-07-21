@@ -4,15 +4,15 @@ import { getDistanceFromLatLonInKm, getEuclideanDistance } from "./utils";
 const animationDuration = 6900;
 const minute = new Date().getMinutes();
 const fietsMarker = (() => {
-	switch (minute%3) {
-	  case 0:
-		return 'ezy';
-	  case 1:
-		return 'oli';
-	  default:
-		return 'fietsje';
+	switch (minute % 3) {
+		case 0:
+			return "ezy";
+		case 1:
+			return "oli";
+		default:
+			return "fietsje";
 	}
-  })();
+})();
 
 const overnachtingen = await fetchOvernachtingenData();
 let etappes = [];
@@ -173,27 +173,6 @@ class MapHandler {
 			icon: fietsjeIcon,
 		}).addTo(this.map);
 
-		// Function to combine the transforms
-		function applyTransform() {
-			const element = document.querySelector(".fietser");
-			if (element) {
-				const currentTransform = window.getComputedStyle(element).transform;
-				let newTransform = "scaleX(-1)";
-
-				if (currentTransform !== "none") {
-					newTransform = `${currentTransform} ${newTransform}`;
-				}
-
-				element.style.transform = newTransform;
-			}
-		}
-
-		// Gebruik een timeout om de transformatie toe te passen nadat het element is gerenderd
-		// setTimeout(applyTransform, 100);
-
-		// Als de marker beweegt, opnieuw de transformatie toepassen
-		// fietsMarker.on("move", applyTransform);
-
 		const lengteAfgelegdeRoute = L.GeometryUtil.length(afgelegdeRoute);
 
 		this.animateRoute(
@@ -221,19 +200,27 @@ class MapHandler {
 			// --- Use overnachting coords for bounding box ---
 			const numDays = 10;
 			const last10 = overnachtingen.slice(-numDays);
-			const last10Coords = last10.map(loc => [loc.lat, loc.lon]);
-			if (last10Coords.length > 1) {
-				const bounds = L.latLngBounds(last10Coords);
-				this.map.fitBounds(bounds, { padding: [22, 42] });
-			} else {
-				this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
-			}
+			const last10Coords = last10.map((loc) => [loc.lat, loc.lon]);
+
+			// if (last10Coords.length > 1) {
+			// 	bounds = L.latLngBounds(last10Coords);
+			// 	// this.map.fitBounds(bounds, { padding: [22, 42] });
+			// } else {
+			// 	bounds = totaleRoute.getBounds();
+			// 	// this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
+			// }
 		}, animationDuration + 169);
 
-		this.generateSegmentButtons(overnachtingen, totaleRoute, latLngsTotaleRoute);
+		// this.map.fitBounds(bounds, { padding: [22, 42] });
+
+		this.generateSegmentButtons(
+			overnachtingen,
+			totaleRoute,
+			latLngsTotaleRoute,
+		);
 
 		// this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
-		// this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
+		this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
 
 		return {
 			lengteTotaleRoute,
@@ -402,10 +389,10 @@ class MapHandler {
 				<h3>${etappe.lengthKm} km</h3>`;
 
 			if (campingData.tentPhoto) {
-				tooltipText += `<img width='220px' src='${imagePath}' alt='slaapplek ${i+1}' /> `;
+				tooltipText += `<img width='220px' src='${imagePath}' alt='slaapplek ${i + 1}' /> `;
 			}
 			let tentMarkerOptions = { icon: tentjeIcon };
-			if (campingData.icon === 'huis') {
+			if (campingData.icon === "huis") {
 				tentMarkerOptions = { icon: huisjeIcon };
 			}
 
@@ -441,30 +428,32 @@ class MapHandler {
 			++i;
 		}, 87);
 	}
-	
+
 	generateSegmentButtons(overnachtingen, totaleRoute, latLngsTotaleRoute) {
 		const numPerSegment = 10;
 		const numSegments = Math.ceil(overnachtingen.length / numPerSegment);
-		const controls = document.getElementById('segment-controls');
-		controls.innerHTML = ''; // Clear previous
-	
+		const controls = document.getElementById("segment-controls");
+		controls.innerHTML = ""; // Clear previous
+
 		// Whole route button
-		const allBtn = document.createElement('button');
-		allBtn.textContent = 'Hele route';
+		const allBtn = document.createElement("button");
+		allBtn.textContent = "Hele route";
 		allBtn.onclick = () => {
 			this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
 			this.setActiveButton(allBtn);
 		};
 		controls.appendChild(allBtn);
-	
+
 		// Segment buttons
 		for (let i = 0; i < numSegments; i++) {
 			const start = i * numPerSegment;
 			const end = Math.min((i + 1) * numPerSegment, overnachtingen.length);
-			const btn = document.createElement('button');
+			const btn = document.createElement("button");
 			btn.textContent = `Dag ${start + 1}-${end}`;
 			btn.onclick = () => {
-				const coords = overnachtingen.slice(start, end).map(loc => [loc.lat, loc.lon]);
+				const coords = overnachtingen
+					.slice(start, end)
+					.map((loc) => [loc.lat, loc.lon]);
 				if (coords.length > 1) {
 					const bounds = L.latLngBounds(coords);
 					this.map.fitBounds(bounds, { padding: [22, 42] });
@@ -476,10 +465,12 @@ class MapHandler {
 		// Optionally, set the first button as active
 		this.setActiveButton(allBtn);
 	}
-	
+
 	setActiveButton(btn) {
-		document.querySelectorAll('#segment-controls button').forEach(b => b.classList.remove('active'));
-		btn.classList.add('active');
+		document
+			.querySelectorAll("#segment-controls button")
+			.forEach((b) => b.classList.remove("active"));
+		btn.classList.add("active");
 	}
 }
 
