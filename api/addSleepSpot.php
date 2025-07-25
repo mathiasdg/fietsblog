@@ -123,7 +123,7 @@ function processImage($filename, $uploadDir): array
 
         // ❇️ Resize/optimaliseer (max 369px breed)
         list($width, $height) = getimagesize($tmpPath);
-        $maxWidth = 369;
+        $maxWidth = 420;
         if ($width > $maxWidth) {
             $newWidth = $maxWidth;
             $newHeight = intval($height * ($maxWidth / $width));
