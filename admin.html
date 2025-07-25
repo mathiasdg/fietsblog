@@ -6,7 +6,6 @@
     <title>Evathi admin</title>
     <link rel="shortcut icon" type="image/png" href="images/favicon.svg" />
 
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
@@ -41,17 +40,28 @@
         placeholder="coordys ?"
         style="width: 569px"
       />
-      <input
-        id="foto"
-        type="file"
-        name="foto"
-        accept="image/*"
-      />
-    
+      <input id="foto" type="file" name="foto" accept="image/*" />
+      <fieldset>
+        <legend>Selecteer icoontje</legend>
+        <label for="icon-tentie">
+          <input
+            type="radio"
+            id="icon-tentie"
+            name="icon"
+            value="tent"
+            checked
+          />
+          Tentje
+        </label>
+        <label for="icon-home">
+          <input type="radio" id="icon-home" name="icon" value="huis" />
+          Huisje
+        </label>
+      </fieldset>
       <button id="nieuw">voeg tentje toe</button>
       <div id="feedback">
         <div id="spinner" class="spinner">
-          <img src='images/loading.gif' alt='spinner ...'/> 
+          <img src="images/loading.gif" alt="spinner ..." />
         </div>
         <div id="feedback-text"></div>
       </div>
