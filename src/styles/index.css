@@ -18,6 +18,7 @@ body {
 	top: 69px;
 	left: 0;
 	padding: 22px 11px;
+	width: 36px;
 }
 .logo {
 	margin-top: 11px;
@@ -227,9 +228,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
+	padding: 4px;
 	background: rgba(235, 98, 98, 0.69);
 	border-radius: 8px;
-	padding: 4px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
 }
 
@@ -249,3 +250,48 @@ body {
 	background: #ff6944;
 	color: #fff;
 }
+
+.blog-news {
+	position: absolute;
+	font-family: "Courier New", Courier, monospace;
+	left: 6px;
+	top: 155px; /* Adjust this so it sits just below the blog icon */
+	color: black;
+	padding:11px 8px;
+	font-size: 1.11em;
+	font-weight: bold;
+	z-index: 9999;
+	display: none;
+	margin-left: 0; /* aligns with the left of the icons */
+	min-width: 330px;
+	text-align: center;
+	background: rgba(235, 98, 98, 0.69);
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+	backdrop-filter: blur(5px);
+}
+  
+  .blog-news::before {
+	content: "";
+	position: absolute;
+	top: -16px; /* position above the popup */
+	left: 6.9%;
+	transform: translateX(-50%);
+	border-width: 0 14px 18px 14px;
+	border-style: solid;
+	border-color: transparent transparent rgba(235, 98, 98, 0.69) transparent;
+	width: 0;
+	height: 0;
+	z-index: 10000;
+  }
+
+  .blog-news h1 {
+	font-size: 1.33rem;
+	margin-bottom: 0.420rem;
+	color: rgb(255, 255, 255);
+  }
+  
+  @keyframes blog-popup-appear {
+	0% { transform: scale(0.7) translateY(-30px); opacity: 0; }
+	100% { transform: scale(1) translateY(0); opacity: 1; }
+  }

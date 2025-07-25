@@ -62,3 +62,30 @@ const intervalID = setInterval(() => {
 }, 11);
 
 setTimeout(() => clearInterval(intervalID), animationDuration + 169);
+
+
+
+// Blog popup logic
+setTimeout(() => {
+  fetch('public/blog-news.txt')
+    .then(response => response.text())
+    .then(text => {
+      if (text.trim()) {
+        const popup = document.getElementById('blog-news');
+        popup.innerHTML = text.trim();
+        popup.classList.add('animate__bounceInUp')
+        popup.style.display = 'block';
+        setTimeout(() => {
+          popup.classList.remove('animate__bounceInUp')
+          popup.classList.add('animate__bounceOutDown')
+            // Wait for the animation to finish before hiding
+          popup.addEventListener('animationend', function handler() {
+            popup.style.display = 'none';
+            popup.classList.remove('animate__bounceOutDown');
+            popup.removeEventListener('animationend', handler);
+          });
+
+        }, 11111);
+      }
+    });
+}, 6900);
