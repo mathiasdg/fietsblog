@@ -101,10 +101,12 @@ button.addEventListener("click", (event) => {
 	const coordInput = coordsInput.value.trim();
 	const foto = fotoInput.files[0];
 	const [lat, lng] = coordInput.split(",").map((s) => Number.parseFloat(s));
+	const icon = document.querySelector('input[name="icon"]:checked').value;
 
 	const formData = new FormData();
 	formData.append("lat", lat.toFixed(6));
 	formData.append("lng", lng.toFixed(6));
+	formData.append("icon", icon); // Add the icon to the form data
 	if (foto) {
 		formData.append("foto", foto);
 	}

@@ -32,6 +32,7 @@ if (empty($_POST)) {
 // ⛳ Coördinaten uitlezen
 $lat = isset($_POST['lat']) ? round(floatval($_POST['lat']), 6) : null;
 $lng = isset($_POST['lng']) ? round(floatval($_POST['lng']), 6) : null;
+$icon = $_POST['icon'] ?? 'tent';
 
 // 🌍 Voeg land en vlag toe
 $geo = getCountryData($lat, $lng);
@@ -64,7 +65,7 @@ $existing['slaapCoordinaten'][] = [
     'kmTotHier' => null,
     'blogTitle' => null,
     'tentPhoto' => $photoUploadedResult['bool'],
-    'icon' => 'tent'
+    'icon' => $icon
 ];
 
 // 💾 Opslaan
