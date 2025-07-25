@@ -389,7 +389,7 @@ class MapHandler {
 				<h3>${etappe.lengthKm} km</h3>`;
 
 			if (campingData.tentPhoto) {
-				tooltipText += `<img width='220px' src='${imagePath}' alt='slaapplek ${i + 1}' /> `;
+				tooltipText += `<img width='287px' src='${imagePath}' alt='slaapplek ${i + 1}' /> `;
 			}
 			let tentMarkerOptions = { icon: tentjeIcon };
 			if (campingData.icon === "huis") {
