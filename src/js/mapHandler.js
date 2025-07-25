@@ -426,7 +426,7 @@ class MapHandler {
 			// });
 
 			++i;
-		}, 87);
+		}, 69);
 	}
 
 	generateSegmentButtons(overnachtingen, totaleRoute, latLngsTotaleRoute) {
