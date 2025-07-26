@@ -372,6 +372,21 @@ class MapHandler {
 		const timer = setInterval((_) => {
 			if (i >= overnachtingen.length - 1) {
 				clearInterval(timer);
+
+				// Add a 1 second delay before zooming
+				setTimeout(() => {
+					// const numPerSegment = 15;
+					// const numSegments = Math.ceil(overnachtingen.length / numPerSegment);
+					// const start = (numSegments - 1) * numPerSegment;
+					const end = overnachtingen.length;
+					const start = end - 11;
+					const coords = overnachtingen.slice(start, end).map((loc) => [loc.lat, loc.lon]);
+					if (coords.length > 1) {
+						const bounds = L.latLngBounds(coords);
+						this.map.fitBounds(bounds, { padding: [0, 0] });
+					}
+				}, 690);
+
 				return;
 			}
 			const campingData = overnachtingen[i];
