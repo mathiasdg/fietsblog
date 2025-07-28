@@ -82,7 +82,7 @@ setTimeout(() => {
 						popup.classList.remove("animate__bounceOutDown");
 						popup.removeEventListener("animationend", handler);
 					});
-				}, 9690);
+				}, 6900);
 			}
 		});
 }, 6900);
