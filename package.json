@@ -10,7 +10,7 @@
     "images": "bun run ./scripts/process-images.js"
   },
   "devDependencies": {
-    "vite": "^7.0.5",
+    "vite": "^7.0.6",
     "sharp": "^0.33.5",
     "vite-plugin-image-optimizer": "^1.1.9"
   },
@@ -21,6 +21,6 @@
     "leaflet.motion": "^0.3.2",
     "light-modal": "^1.2.1",
     "progressbar.js": "^1.1.1",
-    "fslightbox": "^3.6.2"
+    "fslightbox": "^3.7.3"
   }
 }
