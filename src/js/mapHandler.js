@@ -69,6 +69,7 @@ class MapHandler {
 		);
 		this.segmentPolylines = [];
 		this.tentMarkers = [];
+		this.hasZoomed = false;
 	}
 
 	initializeMap() {
@@ -180,11 +181,17 @@ class MapHandler {
 			latLngsAfgelegdeRoute,
 			fietsMarker,
 		);
+		if (!this.hasZoomed) {
+			this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
+			this.hasZoomed = true;
+		}
+
 
 		const intervalID = setInterval(() => {
 			this.map.addLayer(afgelegdeRoute);
 			this.map.removeLayer(afgelegdeRouteVoorAnimatie);
 		}, animationDuration);
+
 		setTimeout(() => {
 			// Remove the animated route
 			this.map.removeLayer(afgelegdeRouteVoorAnimatie);
@@ -198,29 +205,18 @@ class MapHandler {
 			// };
 
 			// --- Use overnachting coords for bounding box ---
-			const numDays = 10;
-			const last10 = overnachtingen.slice(-numDays);
-			const last10Coords = last10.map((loc) => [loc.lat, loc.lon]);
+			// const numDays = 10;
+			// const last10 = overnachtingen.slice(-numDays);
+			// const last10Coords = last10.map((loc) => [loc.lat, loc.lon]);
 
-			// if (last10Coords.length > 1) {
-			// 	bounds = L.latLngBounds(last10Coords);
-			// 	// this.map.fitBounds(bounds, { padding: [22, 42] });
-			// } else {
-			// 	bounds = totaleRoute.getBounds();
-			// 	// this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
-			// }
-		}, animationDuration + 169);
 
-		// this.map.fitBounds(bounds, { padding: [22, 42] });
+		}, animationDuration + 369);
 
 		this.generateSegmentButtons(
 			overnachtingen,
 			totaleRoute,
 			latLngsTotaleRoute,
 		);
-
-		// this.map.fitBounds(afgelegdeRoute.getBounds(), { padding: [22, 42] });
-		this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
 
 		return {
 			lengteTotaleRoute,
@@ -385,7 +381,7 @@ class MapHandler {
 						const bounds = L.latLngBounds(coords);
 						this.map.fitBounds(bounds, { padding: [0, 0] });
 					}
-				}, 690);
+				}, 870);
 
 				return;
 			}
