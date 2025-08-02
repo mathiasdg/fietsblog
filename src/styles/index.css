@@ -250,6 +250,54 @@ body {
 	background: #ff6944;
 	color: #fff;
 }
+/* Mobile collapsible menu */
+@media (max-width: 444px) {
+    .map-overlay {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        max-height: 40px; /* Height for just the toggle button */
+    }
+    
+    .map-overlay.expanded {
+        max-height: 300px; /* Adjust based on your maximum number of buttons */
+    }
+    
+    .map-overlay .toggle-btn {
+        position: relative;
+        background: #ff6944;
+        color: #fff;
+        font-weight: bold;
+        order: -1; /* Put it first */
+        margin-bottom: 2px;
+    }
+    
+    .map-overlay .toggle-btn::after {
+        content: '▲';
+		margin-left: 6.9px;
+        transition: transform 420ms ease;
+		display: inline-block; /* Add this for proper rotation */
+    }
+    
+    .map-overlay.expanded .toggle-btn::after {
+        transform: rotate(180deg);
+    }
+    
+    /* Hide all buttons except toggle on mobile initially */
+    .map-overlay button:not(.toggle-btn) {
+        display: none;
+    }
+    
+    .map-overlay.expanded button:not(.toggle-btn) {
+        display: block;
+    }
+}
+/* Hide toggle button on desktop */
+@media (min-width: 445px) {
+    .map-overlay .toggle-btn {
+        display: none;
+    }
+}
+
 
 .blog-news {
 	position: absolute;

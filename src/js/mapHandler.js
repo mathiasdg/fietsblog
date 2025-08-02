@@ -461,50 +461,84 @@ class MapHandler {
 	}
 
 	generateSegmentButtons(overnachtingen, totaleRoute, latLngsTotaleRoute) {
-		const numPerSegment = 10;
-		const numSegments = Math.ceil(overnachtingen.length / numPerSegment);
-		const controls = document.getElementById("segment-controls");
-		controls.innerHTML = ""; // Clear previous
-
-		// Whole route button
-		const allBtn = document.createElement("button");
-		allBtn.textContent = "Hele route";
-		allBtn.onclick = () => {
-			this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
-			this.setActiveButton(allBtn);
-		};
-		controls.appendChild(allBtn);
-
-		// Segment buttons
-		for (let i = 0; i < numSegments; i++) {
-			const start = i * numPerSegment;
-			const end = Math.min((i + 1) * numPerSegment, overnachtingen.length);
-			const btn = document.createElement("button");
-
-			btn.textContent = (start+1 === end) ? `Dag ${end}` : `Dag ${start + 1}-${end}`;
-			
-			btn.onclick = () => {
-				const coords = overnachtingen
-					.slice(start, end)
-					.map((loc) => [loc.lat, loc.lon]);
-				if (coords.length > 1) {
-					const bounds = L.latLngBounds(coords);
-					this.map.fitBounds(bounds, { padding: [22, 42] });
-				}
-				this.setActiveButton(btn);
+			const numPerSegment = 10;
+			const numSegments = Math.ceil(overnachtingen.length / numPerSegment);
+			const controls = document.getElementById("segment-controls");
+			controls.innerHTML = ""; // Clear previous
+		
+			// Add toggle button for mobile
+			const toggleBtn = document.createElement("button");
+			toggleBtn.className = "toggle-btn";
+			toggleBtn.textContent = "Zoom opties";
+			toggleBtn.onclick = () => this.toggleMenu();
+			controls.appendChild(toggleBtn);
+		
+			// Whole route button
+			const allBtn = document.createElement("button");
+			allBtn.textContent = "Hele route";
+			allBtn.onclick = () => {
+				this.map.fitBounds(totaleRoute.getBounds(), { padding: [0, 0] });
+				this.setActiveButton(allBtn);
+				// this.closeMenuOnMobile();
 			};
-			controls.appendChild(btn);
+			controls.appendChild(allBtn);
+		
+			// Segment buttons
+			for (let i = 0; i < numSegments; i++) {
+				const start = i * numPerSegment;
+				const end = Math.min((i + 1) * numPerSegment, overnachtingen.length);
+				const btn = document.createElement("button");
+				btn.textContent = `Dag ${start + 1}-${end}`;
+				btn.onclick = () => {
+					const coords = overnachtingen
+						.slice(start, end)
+						.map((loc) => [loc.lat, loc.lon]);
+					if (coords.length > 1) {
+						const bounds = L.latLngBounds(coords);
+						this.map.fitBounds(bounds, { padding: [22, 42] });
+					}
+					this.setActiveButton(btn);
+					// this.closeMenuOnMobile();
+				};
+				controls.appendChild(btn);
+			}
+			
+			this.setActiveButton(allBtn);
+			this.setupMobileMenuListeners();
 		}
-		// Optionally, set the first button as active
-		this.setActiveButton(allBtn);
-	}
-
-	setActiveButton(btn) {
-		for (const b of document.querySelectorAll("#segment-controls button")) {
-			b.classList.remove("active");
+		
+		toggleMenu() {
+			const controls = document.getElementById("segment-controls");
+			controls.classList.toggle('expanded');
 		}
-		btn.classList.add("active");
-	}
+		
+		closeMenuOnMobile() {
+			if (window.innerWidth <= 444) {
+				const controls = document.getElementById("segment-controls");
+				controls.classList.remove('expanded');
+			}
+		}
+		
+		setupMobileMenuListeners() {
+			// Close menu when clicking outside on mobile
+			document.addEventListener('click', (event) => {
+				if (window.innerWidth <= 444) {
+					const controls = document.getElementById("segment-controls");
+					const isClickInside = controls.contains(event.target);
+					
+					if (!isClickInside && controls.classList.contains('expanded')) {
+						controls.classList.remove('expanded');
+					}
+				}
+			});
+		}
+		setActiveButton(btn) {
+			// Only target actual zoom buttons, not the toggle button
+			for (const b of document.querySelectorAll("#segment-controls button:not(.toggle-btn)")) {
+				b.classList.remove("active");
+			}
+			btn.classList.add("active");
+		}
 }
 
 export default MapHandler;
