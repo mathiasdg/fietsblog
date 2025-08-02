@@ -3,6 +3,7 @@ import "../styles/index.css";
 import "leaflet-geometryutil";
 import ProgressBar from "progressbar.js";
 import MapHandler from "./mapHandler";
+import blogNewsUrl from "../blog-news.txt?url";
 
 // globals and constants
 const animationDuration = 4444;
@@ -65,7 +66,7 @@ setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
 // Blog popup logic
 setTimeout(() => {
-	fetch("./src/blog-news.txt")
+	fetch(blogNewsUrl)
 		.then((response) => response.text())
 		.then((text) => {
 			if (text.trim()) {
