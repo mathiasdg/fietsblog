@@ -257,7 +257,10 @@ body {
         transition: max-height 0.3s ease-out;
         max-height: 40px; /* Height for just the toggle button */
     }
-    
+	.map-overlay button {
+    	font-size: 0.76em;
+		height: 2.2rem;
+	}
     .map-overlay.expanded {
         max-height: 300px; /* Adjust based on your maximum number of buttons */
     }
