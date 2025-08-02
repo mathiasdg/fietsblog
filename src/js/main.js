@@ -65,7 +65,7 @@ setTimeout(() => clearInterval(intervalID), animationDuration + 169);
 
 // Blog popup logic
 setTimeout(() => {
-	fetch("/blog-news.txt")
+	fetch("/src/blog-news.txt")
 		.then((response) => response.text())
 		.then((text) => {
 			if (text.trim()) {
