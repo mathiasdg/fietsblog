@@ -5,7 +5,7 @@
       "name": "fietsblog",
       "dependencies": {
         "animate.css": "^4.1.1",
-        "fslightbox": "^3.6.2",
+        "fslightbox": "^3.7.3",
         "leaflet-geometryutil": "^0.10.3",
         "leaflet-transitionedicon": "^0.2.1",
         "leaflet.motion": "^0.3.2",
@@ -14,7 +14,7 @@
       },
       "devDependencies": {
         "sharp": "^0.33.5",
-        "vite": "^7.0.5",
+        "vite": "^7.0.6",
         "vite-plugin-image-optimizer": "^1.1.9",
       },
     },
