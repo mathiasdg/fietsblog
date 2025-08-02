@@ -480,7 +480,9 @@ class MapHandler {
 			const start = i * numPerSegment;
 			const end = Math.min((i + 1) * numPerSegment, overnachtingen.length);
 			const btn = document.createElement("button");
-			btn.textContent = `Dag ${start + 1}-${end}`;
+
+			btn.textContent = (start+1 === end) ? `Dag ${end}` : `Dag ${start + 1}-${end}`;
+			
 			btn.onclick = () => {
 				const coords = overnachtingen
 					.slice(start, end)
