@@ -65,7 +65,7 @@ class MapHandler {
 		// this.processData();
 		setTimeout(
 			this.animateCampingLocations.bind(this),
-			animationDuration - 3690,
+			animationDuration - 1690,
 		);
 		this.segmentPolylines = [];
 		this.tentMarkers = [];
@@ -210,7 +210,7 @@ class MapHandler {
 			// const last10Coords = last10.map((loc) => [loc.lat, loc.lon]);
 
 
-		}, animationDuration + 369);
+		}, animationDuration + 690);
 
 		this.generateSegmentButtons(
 			overnachtingen,
@@ -237,7 +237,17 @@ class MapHandler {
 		const timer = setInterval((_) => {
 			if (i >= routeCoordinates.length) {
 				clearInterval(timer);
-				this.map.fitBounds(route.getBounds(), { padding: [12, 33] });
+				// Set marker to the exact last coordinate of the route
+				marker.setLatLng(routeCoordinates[routeCoordinates.length - 1]);
+
+				// Add tooltip to the bike marker using the reusable function
+				const lastEtappe = etappes[etappes.length - 1];
+				const lastOvernachting = overnachtingen[overnachtingen.length - 1];
+				const tooltipText = this.createTooltipText(lastOvernachting, lastEtappe, overnachtingen.length - 1);
+
+				marker.bindTooltip(tooltipText);
+
+				// this.map.fitBounds(route.getBounds(), { padding: [12, 33] });
 				return;
 			}
 			route.addLatLng(routeCoordinates[i]);
@@ -245,7 +255,7 @@ class MapHandler {
 			// this.map.setView(routeCoordinates[i], 8.69);
 
 			i += 69;
-		}, 11);
+		}, 9);
 	}
 
 	/**
@@ -362,6 +372,30 @@ class MapHandler {
 		return closestIndex;
 	}
 
+	/**
+	 * Creates tooltip text for a camping location
+	 * @param {Object} campingData - The camping location data
+	 * @param {Object} etappe - The etappe data
+	 * @param {number} index - The index of the camping location (0-based)
+	 * @returns {string} The HTML tooltip text
+	 */
+	createTooltipText(campingData, etappe, index) {
+		const land = etappe.from === etappe.to
+			? etappe.from
+			: `${etappe.from} &#8611; ${etappe.to}`;
+
+		let tooltipText = `<h2>Etappe ${index + 1}</h2>
+			<h1>${land}</h1>
+			<h3>${etappe.lengthKm} km</h3>`;
+
+		if (campingData.tentPhoto) {
+			const imagePath = `/images/slaapspots/${index + 1}.webp`;
+			tooltipText += `<img width='287px' src='${imagePath}' alt='slaapplek ${index + 1}' />`;
+		}
+
+		return tooltipText;
+	}
+
 	animateCampingLocations() {
 		let i = 0;
 
@@ -371,9 +405,6 @@ class MapHandler {
 
 				// Add a 1 second delay before zooming
 				setTimeout(() => {
-					// const numPerSegment = 15;
-					// const numSegments = Math.ceil(overnachtingen.length / numPerSegment);
-					// const start = (numSegments - 1) * numPerSegment;
 					const end = overnachtingen.length;
 					const start = end - 11;
 					const coords = overnachtingen.slice(start, end).map((loc) => [loc.lat, loc.lon]);
@@ -381,27 +412,16 @@ class MapHandler {
 						const bounds = L.latLngBounds(coords);
 						this.map.fitBounds(bounds, { padding: [0, 0] });
 					}
-				}, 870);
+				}, 1111);
 
 				return;
 			}
 			const campingData = overnachtingen[i];
 			const campingCoordinates = [campingData.lat, campingData.lon];
 			const etappe = etappes[i];
-			const land =
-				etappe.from === etappe.to
-					? etappe.from
-					: `${etappe.from} &#8611; ${etappe.to}`;
 
-			const imagePath = `/images/slaapspots/${i + 1}.webp`;
+			const tooltipText = this.createTooltipText(campingData, etappe, i);
 
-			let tooltipText = `<h2>Etappe ${i + 1} </h2>
-				<h1>${land}</h1>
-				<h3>${etappe.lengthKm} km</h3>`;
-
-			if (campingData.tentPhoto) {
-				tooltipText += `<img width='287px' src='${imagePath}' alt='slaapplek ${i + 1}' /> `;
-			}
 			let tentMarkerOptions = { icon: tentjeIcon };
 			if (campingData.icon === "huis") {
 				tentMarkerOptions = { icon: huisjeIcon };
