@@ -172,7 +172,7 @@
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
 
-    "fslightbox": ["fslightbox@3.7.3", "", {}, "sha512-WrZ8uTLPUITnz1gzjiNlOmex8oludB9eVpt2K0f5dtkaSsStCapv5NKMxP8hfw2xjLbVKNfqpmE9wRXdqixVFg=="],
+    "fslightbox": ["fslightbox@3.7.4", "", {}, "sha512-zQqMHxiYkR0W/xrWQlchoO626C5KCM6rabpMWiJsy+MZCMHo7zlywsGAOGeOahRUqBZzXT9OeMddiVSfW77gaA=="],
 
     "is-arrayish": ["is-arrayish@0.3.2", "", {}, "sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ=="],
 
