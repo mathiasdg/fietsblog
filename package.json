@@ -10,7 +10,7 @@
     "images": "bun run ./scripts/process-images.js"
   },
   "devDependencies": {
-    "vite": "^7.0.6",
+    "vite": "^7.1.1",
     "sharp": "^0.33.5",
     "vite-plugin-image-optimizer": "^1.1.9"
   },
