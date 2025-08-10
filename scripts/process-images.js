@@ -64,6 +64,7 @@ async function processImagesInDir(dir, outputSubDir, slaapCoordinaten) {
 					}
 
 					await image
+						.rotate()
 						.resize(newWidth, newHeight, {
 							fit: "inside",
 							withoutEnlargement: true,
